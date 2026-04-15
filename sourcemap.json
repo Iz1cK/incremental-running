@@ -1,0 +1,65 @@
+{
+  "name": "game",
+  "className": "DataModel",
+  "children": [
+    {
+      "name": "ReplicatedStorage",
+      "className": "ReplicatedStorage",
+      "pluginManaged": true,
+      "children": [
+        {
+          "name": "Shared",
+          "className": "Folder",
+          "pluginManaged": true,
+          "children": [
+            {
+              "name": "RunRewardsConfig",
+              "className": "ModuleScript",
+              "pluginManaged": true,
+              "filePaths": [
+                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/src/shared/RunRewardsConfig.lua"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ServerScriptService",
+      "className": "ServerScriptService",
+      "pluginManaged": true,
+      "children": [
+        {
+          "name": "FootyenService",
+          "className": "Script",
+          "pluginManaged": true,
+          "filePaths": [
+            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/src/server/FootyenService.legacy.lua"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "StarterPlayer",
+      "className": "StarterPlayer",
+      "pluginManaged": true,
+      "children": [
+        {
+          "name": "StarterPlayerScripts",
+          "className": "StarterPlayerScripts",
+          "pluginManaged": true,
+          "children": [
+            {
+              "name": "FootyenHud",
+              "className": "LocalScript",
+              "pluginManaged": true,
+              "filePaths": [
+                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/src/client/FootyenHud.local.lua"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+local RunRewardsConfig = {
+	STUDS_PER_FOOTYEN = 20,
+	SAMPLE_INTERVAL = 0.15,
+	MINIMUM_MOVE_DIRECTION = 0.05,
+	MAX_TRACKED_STEP_STUDS = 18,
+	TRACK_HORIZONTAL_ONLY = true,
+}
+
+return RunRewardsConfig
