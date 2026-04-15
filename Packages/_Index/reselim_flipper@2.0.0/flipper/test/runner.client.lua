@@ -1,5 +1,2 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
-local TestEZ = require(ReplicatedStorage.TestEZ)
-
-TestEZ.TestBootstrap:run({ ReplicatedStorage.Flipper }, TestEZ.Reporters.TextReporter)
+-- Disabled for local Script Sync gameplay runtime.
+-- This upstream package script is only for package testing.

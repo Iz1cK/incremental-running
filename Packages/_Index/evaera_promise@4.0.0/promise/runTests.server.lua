@@ -1,3 +1,2 @@
-require(script.Parent.TestEZ).TestBootstrap:run({
-	game.ServerScriptService.Lib
-})
+-- Disabled for local Script Sync gameplay runtime.
+-- This upstream package script is only for package testing.
