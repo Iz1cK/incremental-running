@@ -49,6 +49,7 @@ local function createLabel(props)
 		TextWrapped = props.wrapped or false,
 		TextXAlignment = props.alignment or Enum.TextXAlignment.Left,
 		TextYAlignment = props.verticalAlignment or Enum.TextYAlignment.Top,
+		ZIndex = props.zindex or 1
 	})
 end
 
@@ -168,11 +169,11 @@ local function getOfferArtwork(offer)
 	end
 
 	if offer.entitlementId == "ExtraEquipTwo" or offer.stackableId == "ExtraPetSlots" then
-		return UiAssetConfig.getPetImageUri("Emerald"), Color3.fromRGB(214, 255, 225)
+		return UiAssetConfig.TWO_EXTRA_EQUIP, Color3.fromRGB(249, 241, 255)
 	end
 
 	if offer.entitlementId == "LuckySummon" then
-		return UiAssetConfig.getPetImageUri("Galactic"), Color3.fromRGB(255, 220, 158)
+		return UiAssetConfig.PET_PLACEHOLDER, Color3.fromRGB(255, 220, 158)
 	end
 
 	if offer.entitlementId == "TripleSummon" then
@@ -262,8 +263,10 @@ local function OfferCard(props)
 			image = artwork,
 			imageColor3 = artworkTint,
 			imageTransparency = offer.bundle and 0 or 0.08,
-			position = UDim2.new(1, -92, 0, 8),
-			size = UDim2.fromOffset(80, 80),
+			position = offer.entitlementId == "TripleSummon" and UDim2.new(1, -98, 0, -15) or UDim2.new(1, -86, 0, 0),
+			size = offer.entitlementId == "TripleSummon"
+			and UDim2.fromOffset(105, 105)
+			or UDim2.fromOffset(80, 80),
 		}),
 		Title = createLabel({
 			position = UDim2.fromOffset(14, 12),
@@ -298,12 +301,13 @@ local function OfferCard(props)
 			}),
 		}),
 		Price = createLabel({
-			position = UDim2.new(1, -120, 0, props.compact and 70 or 76),
+			position = UDim2.new(1, -120, 0, props.compact and 70 or 70),
 			size = UDim2.fromOffset(104, 16),
 			font = Enum.Font.GothamBold,
 			text = string.format("%d R$", offer.robuxPrice),
 			textColor3 = Color3.fromRGB(255, 224, 149),
 			textSize = 15,
+			zindex = 10,
 			alignment = Enum.TextXAlignment.Right,
 		}),
 		OwnedInfo = (owned or stackCount > 0) and createLabel({
@@ -368,7 +372,7 @@ end
 local function ShopUi()
 	local playerState = usePlayerState()
 	local isOpen, setIsOpen = React.useState(false)
-	local statusMessage, setStatusMessage = React.useState("Marketplace IDs are placeholders until you replace them in ShopConfig.")
+	local statusMessage, setStatusMessage = React.useState("")
 
 	local function promptOffer(offerId)
 		local offer = ShopConfig.getOffer(offerId)
@@ -453,7 +457,7 @@ local function ShopUi()
 		BackgroundColor3 = Color3.fromRGB(12, 17, 28),
 		BorderSizePixel = 0,
 		Position = UDim2.fromScale(0.54, 0.5),
-		Size = UDim2.fromOffset(980, 640),
+		Size = UDim2.fromOffset(680, 640),
 	}, {
 		Corner = React.createElement("UICorner", {
 			CornerRadius = UDim.new(0, 28),
@@ -467,7 +471,7 @@ local function ShopUi()
 			BackgroundColor3 = Color3.fromRGB(23, 31, 47),
 			BorderSizePixel = 0,
 			Position = UDim2.fromOffset(18, 16),
-			Size = UDim2.fromOffset(944, 76),
+			Size = UDim2.new(1, -36, 0, 64)
 		}, {
 			Corner = React.createElement("UICorner", {
 				CornerRadius = UDim.new(0, 22),
@@ -494,7 +498,7 @@ local function ShopUi()
 				image = UiAssetConfig.FOOTGEM_ICON_URI,
 				label = "Footgems",
 				labelColor = Color3.fromRGB(177, 234, 255),
-				position = UDim2.fromOffset(612, 12),
+				position = UDim2.new(1, -320, 0, 12),
 				size = UDim2.fromOffset(122, 34),
 				strokeColor = Color3.fromRGB(88, 181, 225),
 				value = string.format("%d", playerState.footgems),
@@ -505,14 +509,14 @@ local function ShopUi()
 				image = UiAssetConfig.FOOTYEN_ICON_URI,
 				label = "Footyens",
 				labelColor = Color3.fromRGB(206, 255, 198),
-				position = UDim2.fromOffset(740, 12),
+				position = UDim2.new(1, -180, 0, 12),
 				size = UDim2.fromOffset(122, 34),
 				strokeColor = Color3.fromRGB(84, 201, 111),
 				value = string.format("%d", playerState.footyens),
 				valueColor = Color3.fromRGB(250, 255, 245),
 			}),
 			Entitlements = createLabel({
-				position = UDim2.fromOffset(608, 48),
+				position = UDim2.new(1, -320, 0, 46),
 				size = UDim2.fromOffset(256, 16),
 				font = Enum.Font.Gotham,
 				text = string.format("%d / %d perks owned", countOwnedEntitlements(playerState), #ShopConfig.EntitlementIds),
@@ -522,7 +526,7 @@ local function ShopUi()
 			}),
 			Close = createActionButton({
 				backgroundColor = Color3.fromRGB(45, 57, 82),
-				position = UDim2.fromOffset(884, 18),
+				position = UDim2.new(1, -50, 0, 18),
 				size = UDim2.fromOffset(42, 42),
 				text = "X",
 				onClick = function()
@@ -586,7 +590,7 @@ local function ShopUi()
 			GamePasses = React.createElement("Frame", {
 				BackgroundTransparency = 1,
 				LayoutOrder = 6,
-				Size = UDim2.fromOffset(944, 498),
+				Size = UDim2.fromOffset(944, 560),
 			}, buildGrid(ShopConfig.OfferCategories.GamePasses, false)),
 			StackableHeader = createLabel({
 				layoutOrder = 7,

@@ -268,7 +268,7 @@ local function HatchResultCard(props)
 				}),
 			}),
 			Egg = props.phase == "hatching" and createImage({
-				image = UiAssetConfig.SUMMON_EGG_URI,
+				image = UiAssetConfig.PET_PLACEHOLDER,
 				position = props.isLarge and UDim2.fromOffset(34, 18) or UDim2.fromOffset(22, 16),
 				size = props.isLarge and UDim2.fromOffset(176, 176) or UDim2.fromOffset(118, 118),
 				imageTransparency = 0.02,

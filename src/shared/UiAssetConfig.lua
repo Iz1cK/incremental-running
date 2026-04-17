@@ -5,7 +5,9 @@ UiAssetConfig.FOOTYEN_ICON_URI = "rbxassetid://134840159099471"
 UiAssetConfig.FOOTGEM_ICON_URI = "rbxassetid://94766963945790"
 UiAssetConfig.PETS_ICON_URI = "rbxassetid://111647636583085"
 UiAssetConfig.AUTO_ICON_URI = "rbxassetid://102376239929767"
-UiAssetConfig.SUMMON_EGG_URI = "rbxassetid://78469894182138"
+UiAssetConfig.SUMMON_EGG_URI = "rbxassetid://87745789794514"
+UiAssetConfig.TWO_EXTRA_EQUIP = "rbxassetid://118447704985093"
+UiAssetConfig.PET_PLACEHOLDER = "rbxassetid://108477177569962"
 
 UiAssetConfig.PET_IMAGE_URIS = {
 	Common = "rbxassetid://94699072162342",
