@@ -1,5 +1,48 @@
+local LiveConfig = require(script.Parent:WaitForChild("LiveConfig"))
 local RunRewardsConfig = require(script.Parent:WaitForChild("RunRewardsConfig"))
 
+--[[
+LiveConfig default JSON example.
+Lua-only helper functions such as valueFormatter are omitted:
+{
+  "WALL_MODEL_NAME": "FootyenUpgradeWall",
+  "WALL_HEADER_PART_NAME": "HeaderPanel",
+  "PURCHASE_COOLDOWN": 0.18,
+  "Upgrades": {
+    "MovementSpeed": {
+      "displayName": "Movement Speed",
+      "description": "Run faster so every second of movement covers more ground.",
+      "baseCost": 30,
+      "costScale": 1.45,
+      "costRoundTo": 5,
+      "maxLevel": 12,
+      "baseValue": 16,
+      "perLevel": 2
+    },
+    "StudsPerCurrency": {
+      "displayName": "Studs Per Footyen",
+      "description": "Lower the distance needed before every Footyen payout.",
+      "baseCost": 45,
+      "costScale": 1.55,
+      "costRoundTo": 5,
+      "maxLevel": 12,
+      "baseValue": 20,
+      "perLevel": -1,
+      "minValue": 6
+    },
+    "CurrencyMultiplier": {
+      "displayName": "Currency Multiplier",
+      "description": "Boost each Footyen payout before it lands in your balance.",
+      "baseCost": 60,
+      "costScale": 1.65,
+      "costRoundTo": 5,
+      "maxLevel": 10,
+      "baseValue": 1,
+      "perLevel": 0.25
+    }
+  }
+}
+]]
 local UpgradeConfig = {}
 
 UpgradeConfig.WALL_MODEL_NAME = "FootyenUpgradeWall"
@@ -125,5 +168,9 @@ end
 function UpgradeConfig.formatValue(upgradeId, value)
 	return UpgradeConfig.getDefinition(upgradeId).valueFormatter(value)
 end
+
+UpgradeConfig.Live = LiveConfig.attachModule(UpgradeConfig, {
+	key = "UpgradeConfig",
+})
 
 return UpgradeConfig

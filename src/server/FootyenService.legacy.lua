@@ -6,14 +6,17 @@ local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 
 local shared = ReplicatedStorage:WaitForChild("Shared")
+local AchievementConfig = require(shared:WaitForChild("AchievementConfig"))
 local BootConfig = require(shared:WaitForChild("BootConfig"))
 local CurrencyConfig = require(shared:WaitForChild("CurrencyConfig"))
 local dataStoreConfig = require(shared:WaitForChild("DataStoreConfig"))
 local PetConfig = require(shared:WaitForChild("PetConfig"))
+local PrestigeConfig = require(shared:WaitForChild("PrestigeConfig"))
 local runRewardsConfig = require(shared:WaitForChild("RunRewardsConfig"))
 local ShopConfig = require(shared:WaitForChild("ShopConfig"))
 local SummonConfig = require(shared:WaitForChild("SummonConfig"))
 local upgradeConfig = require(shared:WaitForChild("UpgradeConfig"))
+local WorldConfig = require(shared:WaitForChild("WorldConfig"))
 local network = require(shared:WaitForChild("ZapServer"))
 
 local random = Random.new()
@@ -24,6 +27,7 @@ local nextAutosaveAt = 0
 local applyMovementSpeed
 local sendStateSnapshot
 local sendPetInventorySnapshot
+local sendAchievementSnapshot
 local refreshGamePassOwnership
 
 local bootFolder = Workspace:FindFirstChild(BootConfig.COLLECTION_FOLDER_NAME)
@@ -169,6 +173,46 @@ local function cloneNumberMap(source)
 	return table.clone(source)
 end
 
+local function createDefaultWorldUnlocks()
+	local result = {}
+
+	for _, worldId in ipairs(WorldConfig.WorldOrder) do
+		result[worldId] = worldId == WorldConfig.DEFAULT_WORLD_ID
+	end
+
+	return result
+end
+
+local function sanitizeAchievementClaims(rawClaims)
+	local result = AchievementConfig.createDefaultClaimState()
+
+	if typeof(rawClaims) ~= "table" then
+		return result
+	end
+
+	for _, achievementId in ipairs(AchievementConfig.getOrderedAchievementIds()) do
+		result[achievementId] = rawClaims[achievementId] == true
+	end
+
+	return result
+end
+
+local function sanitizeWorldUnlocks(rawWorldUnlocks)
+	local result = createDefaultWorldUnlocks()
+
+	if typeof(rawWorldUnlocks) == "table" then
+		for _, worldId in ipairs(WorldConfig.WorldOrder) do
+			if rawWorldUnlocks[worldId] ~= nil then
+				result[worldId] = rawWorldUnlocks[worldId] == true
+			end
+		end
+	end
+
+	result[WorldConfig.DEFAULT_WORLD_ID] = true
+
+	return result
+end
+
 local function createPurchaseHistoryEntry(sourceType, offerId, purchaseId, details, grantedAtUnix)
 	local offer = ShopConfig.Offers[offerId]
 
@@ -195,8 +239,13 @@ local function buildSavePayload(state)
 		savedAtUnix = os.time(),
 		footyens = state.footyens.Value,
 		footgems = state.footgems.Value,
+		footcores = state.footcores,
 		totalDistance = state.totalDistance,
+		totalSummons = state.totalSummons,
 		bootsCollected = state.bootsCollected,
+		rebirthCount = state.rebirthCount,
+		worldUnlocks = cloneBooleanMap(state.worldUnlocks),
+		achievementClaims = cloneBooleanMap(state.achievementClaims),
 		pendingStuds = state.pendingStuds,
 		pendingPayout = state.pendingPayout,
 		upgrades = table.clone(state.upgradeLevels),
@@ -220,6 +269,8 @@ local function deserializeSavePayload(userId, payload)
 	local bootUpgrades = typeof(payload) == "table" and payload.bootUpgrades or nil
 	local rawPets = typeof(payload) == "table" and payload.pets or nil
 	local rawShop = typeof(payload) == "table" and payload.shop or nil
+	local rawWorldUnlocks = typeof(payload) == "table" and payload.worldUnlocks or nil
+	local rawAchievementClaims = typeof(payload) == "table" and payload.achievementClaims or nil
 	local runUpgradeLevels = {}
 	local loadedBootUpgradeLevels = {}
 	local loadedEntitlements = ShopConfig.createDefaultEntitlements()
@@ -367,8 +418,13 @@ local function deserializeSavePayload(userId, payload)
 	return {
 		footyens = sanitizeInteger(typeof(payload) == "table" and payload.footyens or CurrencyConfig.STARTING_FOOTYENS, CurrencyConfig.STARTING_FOOTYENS, 0),
 		footgems = sanitizeInteger(typeof(payload) == "table" and payload.footgems or CurrencyConfig.STARTING_FOOTGEMS, CurrencyConfig.STARTING_FOOTGEMS, 0),
+		footcores = sanitizeInteger(typeof(payload) == "table" and payload.footcores or 0, 0, 0),
 		totalDistance = sanitizeNumber(typeof(payload) == "table" and payload.totalDistance or 0, 0, 0),
+		totalSummons = sanitizeInteger(typeof(payload) == "table" and payload.totalSummons or 0, 0, 0),
 		bootsCollected = sanitizeInteger(typeof(payload) == "table" and payload.bootsCollected or 0, 0, 0),
+		rebirthCount = sanitizeInteger(typeof(payload) == "table" and payload.rebirthCount or 0, 0, 0),
+		worldUnlocks = sanitizeWorldUnlocks(rawWorldUnlocks),
+		achievementClaims = sanitizeAchievementClaims(rawAchievementClaims),
 		pendingStuds = sanitizeNumber(typeof(payload) == "table" and payload.pendingStuds or 0, 0, 0),
 		pendingPayout = sanitizeNumber(typeof(payload) == "table" and payload.pendingPayout or 0, 0, 0, 0.999999),
 		upgradeLevels = runUpgradeLevels,
@@ -692,6 +748,100 @@ local function getSpawnOrigin(state)
 	return Vector3.zero
 end
 
+local function countUnlockedWorlds(state)
+	local unlockedCount = 0
+
+	for _, worldId in ipairs(WorldConfig.WorldOrder) do
+		if state.worldUnlocks[worldId] == true then
+			unlockedCount = unlockedCount + 1
+		end
+	end
+
+	return unlockedCount
+end
+
+local function countLegendaryPets(state)
+	local legendaryCount = 0
+
+	for _, pet in ipairs(state.pets) do
+		local definition = PetConfig.getDefinition(pet.petId)
+		if definition.rarity == "Legendary" then
+			legendaryCount = legendaryCount + 1
+		end
+	end
+
+	return legendaryCount
+end
+
+local function getAchievementProgressValue(state, achievementType)
+	if achievementType == "TotalDistance" then
+		return state.totalDistance
+	end
+
+	if achievementType == "TotalSummons" then
+		return state.totalSummons
+	end
+
+	if achievementType == "LegendaryPetsOwned" then
+		return countLegendaryPets(state)
+	end
+
+	if achievementType == "BootsCollected" then
+		return state.bootsCollected
+	end
+
+	if achievementType == "RebirthCount" then
+		return state.rebirthCount
+	end
+
+	if achievementType == "WorldsUnlocked" then
+		return countUnlockedWorlds(state)
+	end
+
+	return 0
+end
+
+local function serializeAchievements(state)
+	local achievements = table.create(#AchievementConfig.ORDERED_ACHIEVEMENT_IDS)
+	local completedAchievementCount = 0
+	local claimedAchievementCount = 0
+
+	for index, achievementId in ipairs(AchievementConfig.ORDERED_ACHIEVEMENT_IDS) do
+		local definition = AchievementConfig.getAchievement(achievementId)
+		local progress = getAchievementProgressValue(state, definition.type)
+		local isComplete = progress >= definition.target
+		local isClaimed = state.achievementClaims[achievementId] == true
+
+		if isComplete then
+			completedAchievementCount = completedAchievementCount + 1
+		end
+
+		if isClaimed then
+			claimedAchievementCount = claimedAchievementCount + 1
+		end
+
+		achievements[index] = {
+			id = achievementId,
+			displayName = definition.displayName,
+			description = definition.description,
+			type = definition.type,
+			progress = progress,
+			target = definition.target,
+			isComplete = isComplete,
+			isClaimed = isClaimed,
+			rewardFootgems = sanitizeInteger(definition.reward and definition.reward.footgems or 0, 0, 0),
+			rewardFootcores = sanitizeInteger(definition.reward and definition.reward.footcores or 0, 0, 0),
+		}
+	end
+
+	return {
+		achievementCount = #achievements,
+		completedAchievementCount = completedAchievementCount,
+		claimedAchievementCount = claimedAchievementCount,
+		achievements = achievements,
+	}
+end
+
 local function serializeState(state)
 	return {
 		footyens = state.footyens.Value,
@@ -756,8 +906,13 @@ end
 local function applyLoadedData(state, loadedData)
 	state.footyens.Value = loadedData.footyens
 	state.footgems.Value = loadedData.footgems
+	state.footcores = loadedData.footcores
 	state.totalDistance = loadedData.totalDistance
+	state.totalSummons = loadedData.totalSummons
 	state.bootsCollected = loadedData.bootsCollected
+	state.rebirthCount = loadedData.rebirthCount
+	state.worldUnlocks = cloneBooleanMap(loadedData.worldUnlocks)
+	state.achievementClaims = cloneBooleanMap(loadedData.achievementClaims)
 	state.pendingStuds = loadedData.pendingStuds
 	state.pendingPayout = loadedData.pendingPayout
 	state.nextPetSerial = loadedData.nextPetSerial
@@ -787,6 +942,7 @@ local function applyLoadedData(state, loadedData)
 	applyMovementSpeed(state)
 	sendStateSnapshot(state)
 	sendPetInventorySnapshot(state)
+	sendAchievementSnapshot(state)
 	task.spawn(refreshGamePassOwnership, state, true)
 end
 
@@ -874,6 +1030,10 @@ sendStateSnapshot = function(_state)
 end
 
 sendPetInventorySnapshot = function(_state)
+	return nil
+end
+
+sendAchievementSnapshot = function(_state)
 	return nil
 end
 
@@ -1479,6 +1639,7 @@ local function collectBoot(state, index)
 	removeBootAtIndex(state, index)
 	markStateDirty(state)
 	sendStateSnapshot(state)
+	sendAchievementSnapshot(state)
 
 	return true
 end
@@ -2087,11 +2248,13 @@ local function summonPets(player, request)
 		}
 	end
 
+	state.totalSummons = state.totalSummons + #results
 	sortPets(state)
 	recalculatePetBonuses(state)
 	markStateDirty(state)
 	sendStateSnapshot(state)
 	sendPetInventorySnapshot(state)
+	sendAchievementSnapshot(state)
 
 	local resultMessage = summonAmount == 1
 		and string.format("You summoned %s.", PetConfig.getDefinition(results[1].petId).displayName)
@@ -2112,6 +2275,90 @@ local function summonPets(player, request)
 		spentFootgems = summonCost,
 		remainingFootgems = state.footgems.Value,
 		results = results,
+	}
+end
+
+local function claimAchievement(player, achievementId)
+	local state = playerStates[player]
+	if state == nil or not state.isLoaded then
+		return {
+			success = false,
+			message = "Your achievement data is still loading.",
+			awardedFootgems = 0,
+			awardedFootcores = 0,
+		}
+	end
+
+	if typeof(achievementId) ~= "string" then
+		return {
+			success = false,
+			message = "That achievement request was invalid.",
+			awardedFootgems = 0,
+			awardedFootcores = 0,
+		}
+	end
+
+	local definition = AchievementConfig.Achievements[achievementId]
+	if definition == nil then
+		return {
+			success = false,
+			message = "That achievement does not exist.",
+			awardedFootgems = 0,
+			awardedFootcores = 0,
+		}
+	end
+
+	if state.achievementClaims[achievementId] == true then
+		return {
+			success = false,
+			message = "That achievement has already been claimed.",
+			awardedFootgems = 0,
+			awardedFootcores = 0,
+		}
+	end
+
+	local progress = getAchievementProgressValue(state, definition.type)
+	if progress < definition.target then
+		return {
+			success = false,
+			message = "That achievement is not complete yet.",
+			awardedFootgems = 0,
+			awardedFootcores = 0,
+		}
+	end
+
+	local awardedFootgems = sanitizeInteger(definition.reward and definition.reward.footgems or 0, 0, 0)
+	local awardedFootcores = sanitizeInteger(definition.reward and definition.reward.footcores or 0, 0, 0)
+
+	state.achievementClaims[achievementId] = true
+
+	if awardedFootgems > 0 then
+		state.footgems.Value = state.footgems.Value + awardedFootgems
+	end
+
+	if awardedFootcores > 0 then
+		state.footcores = state.footcores + awardedFootcores
+	end
+
+	markStateDirty(state)
+	sendStateSnapshot(state)
+	sendAchievementSnapshot(state)
+
+	local rewardParts = {}
+	if awardedFootgems > 0 then
+		table.insert(rewardParts, string.format("%d Footgems", awardedFootgems))
+	end
+	if awardedFootcores > 0 then
+		table.insert(rewardParts, string.format("%d %s", awardedFootcores, PrestigeConfig.CURRENCY_NAME))
+	end
+
+	return {
+		success = true,
+		message = #rewardParts > 0
+			and string.format("Claimed %s: %s.", definition.displayName, table.concat(rewardParts, " and "))
+			or string.format("Claimed %s.", definition.displayName),
+		awardedFootgems = awardedFootgems,
+		awardedFootcores = awardedFootcores,
 	}
 end
 
@@ -2176,6 +2423,20 @@ local function getDefaultPetInventorySnapshot()
 	}
 end
 
+local function getDefaultAchievementSnapshot()
+	local state = {
+		totalDistance = 0,
+		totalSummons = 0,
+		bootsCollected = 0,
+		rebirthCount = 0,
+		pets = {},
+		worldUnlocks = createDefaultWorldUnlocks(),
+		achievementClaims = AchievementConfig.createDefaultClaimState(),
+	}
+
+	return serializeAchievements(state)
+end
+
 local function onPlayerAdded(player)
 	local leaderstats = createLeaderstats(player)
 
@@ -2183,8 +2444,11 @@ local function onPlayerAdded(player)
 		player = player,
 		footyens = leaderstats.footyens,
 		footgems = leaderstats.footgems,
+		footcores = 0,
 		totalDistance = 0,
+		totalSummons = 0,
 		bootsCollected = 0,
+		rebirthCount = 0,
 		upgradeLevels = {
 			MovementSpeed = 0,
 			StudsPerCurrency = 0,
@@ -2200,6 +2464,8 @@ local function onPlayerAdded(player)
 			GoldenMultiplier = 0,
 		},
 		pets = {},
+		worldUnlocks = createDefaultWorldUnlocks(),
+		achievementClaims = AchievementConfig.createDefaultClaimState(),
 		nextPetSerial = 1,
 		permanentEntitlements = ShopConfig.createDefaultEntitlements(),
 		gamePassOwnership = ShopConfig.createDefaultEntitlements(),
@@ -2359,6 +2625,30 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 	return Enum.ProductPurchaseDecision.PurchaseGranted
 end
 
+sendStateSnapshot = function(state)
+	if state == nil or playerStates[state.player] ~= state then
+		return
+	end
+
+	network.PlayerStateSnapshot.Fire(state.player, serializeState(state))
+end
+
+sendPetInventorySnapshot = function(state)
+	if state == nil or playerStates[state.player] ~= state then
+		return
+	end
+
+	network.PetInventorySnapshot.Fire(state.player, serializePetInventory(state))
+end
+
+sendAchievementSnapshot = function(state)
+	if state == nil or playerStates[state.player] ~= state then
+		return
+	end
+
+	network.AchievementSnapshot.Fire(state.player, serializeAchievements(state))
+end
+
 network.RequestSprint.SetCallback(tryStartSprint)
 network.PurchaseUpgrade.SetCallback(purchaseRunUpgrade)
 network.PurchaseBootUpgrade.SetCallback(purchaseBootUpgrade)
@@ -2368,6 +2658,7 @@ network.DeletePets.SetCallback(deletePets)
 network.UpgradePet.SetCallback(upgradePet)
 network.EquipBestPets.SetCallback(equipBestPets)
 network.SummonPets.SetCallback(summonPets)
+network.ClaimAchievement.SetCallback(claimAchievement)
 
 network.GetPlayerState.SetCallback(function(player)
 	local state = playerStates[player]
@@ -2387,6 +2678,16 @@ network.GetPetInventory.SetCallback(function(player)
 	end
 
 	return serializePetInventory(state)
+end)
+
+network.GetAchievements.SetCallback(function(player)
+	local state = playerStates[player]
+
+	if state == nil then
+		return getDefaultAchievementSnapshot()
+	end
+
+	return serializeAchievements(state)
 end)
 
 RunService.Heartbeat:Connect(function(deltaTime)

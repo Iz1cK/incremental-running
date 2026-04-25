@@ -1,3 +1,37 @@
+local LiveConfig = require(script.Parent:WaitForChild("LiveConfig"))
+
+--[[
+LiveConfig default JSON shape example.
+Colors are serialized by LiveConfig, and Lua-only formatter functions are omitted:
+{
+  "COLLECTION_FOLDER_NAME": "FootyenBoots",
+  "WALL_MODEL_NAME": "FootyenBootWall",
+  "WALL_HEADER_PART_NAME": "HeaderPanel",
+  "PURCHASE_COOLDOWN": 0.18,
+  "BOOT_RING_MIN_DISTANCE": 14,
+  "BOOT_RING_MAX_DISTANCE": 40,
+  "BOOT_RAYCAST_HEIGHT": 60,
+  "MAX_SPAWN_ATTEMPTS": 18,
+  "PICKUP_SCAN_INTERVAL": 0.08,
+  "BOOT_FLOAT_HEIGHT": 1,
+  "BOOT_DESPAWN_FADE_TIME": 0.18,
+  "MIN_DISTANCE_FROM_WALL": 14,
+  "MIN_DISTANCE_FROM_PLAYER": 10,
+  "NORMAL_BOOT_COLOR": { "__liveConfigType": "Color3", "r": 0.290196, "g": 0.580392, "b": 1 },
+  "NORMAL_BOOT_ACCENT": { "__liveConfigType": "Color3", "r": 0.086275, "g": 0.141176, "b": 0.227451 },
+  "GOLDEN_BOOT_COLOR": { "__liveConfigType": "Color3", "r": 1, "g": 0.819608, "b": 0.345098 },
+  "GOLDEN_BOOT_ACCENT": { "__liveConfigType": "Color3", "r": 0.490196, "g": 0.321569, "b": 0.07451 },
+  "Upgrades": {
+    "BootValue": { "displayName": "Boot Value", "baseCost": 40, "costScale": 1.42, "costRoundTo": 5, "maxLevel": 12, "baseValue": 5, "perLevel": 2 },
+    "SpawnRate": { "displayName": "Spawn Rate", "baseCost": 55, "costScale": 1.48, "costRoundTo": 5, "maxLevel": 12, "baseValue": 4.5, "perLevel": -0.25, "minValue": 1.4 },
+    "MaxActiveBoots": { "displayName": "Max Active Boots", "baseCost": 65, "costScale": 1.5, "costRoundTo": 5, "maxLevel": 10, "baseValue": 6, "perLevel": 1 },
+    "PickupRadius": { "displayName": "Pickup Radius", "baseCost": 50, "costScale": 1.46, "costRoundTo": 5, "maxLevel": 10, "baseValue": 5.5, "perLevel": 0.75 },
+    "BootLifetime": { "displayName": "Boot Lifetime", "baseCost": 45, "costScale": 1.44, "costRoundTo": 5, "maxLevel": 10, "baseValue": 28, "perLevel": 4 },
+    "GoldenChance": { "displayName": "Golden Chance", "baseCost": 80, "costScale": 1.56, "costRoundTo": 5, "maxLevel": 8, "baseValue": 0.08, "perLevel": 0.03, "maxValue": 0.32 },
+    "GoldenMultiplier": { "displayName": "Golden Multiplier", "baseCost": 95, "costScale": 1.6, "costRoundTo": 5, "maxLevel": 8, "baseValue": 3, "perLevel": 0.5 }
+  }
+}
+]]
 local BootConfig = {}
 
 BootConfig.COLLECTION_FOLDER_NAME = "FootyenBoots"
@@ -196,5 +230,9 @@ end
 function BootConfig.formatValue(upgradeId, value)
 	return BootConfig.getDefinition(upgradeId).valueFormatter(value)
 end
+
+BootConfig.Live = LiveConfig.attachModule(BootConfig, {
+	key = "BootConfig",
+})
 
 return BootConfig

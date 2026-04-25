@@ -17,13 +17,13 @@ Colors are serialized by LiveConfig:
     "SolarCapy": "Emerald",
     "StormLynx": "Galactic"
   },
-  "Pets": {
-    "Common": { "displayName": "Common", "rarity": "Common", "shortCode": "CM", "primaryColor": { "__liveConfigType": "Color3", "r": 0.698039, "g": 0.772549, "b": 0.890196 }, "accentColor": { "__liveConfigType": "Color3", "r": 0.92549, "g": 0.952941, "b": 1 }, "multiplierBase": 1.2, "multiplierPerLevel": 0.16, "passiveBase": 7, "passivePerLevel": 2 },
-    "Angel": { "displayName": "Angel", "rarity": "Common", "shortCode": "AN", "primaryColor": { "__liveConfigType": "Color3", "r": 1, "g": 0.858824, "b": 0.556863 }, "accentColor": { "__liveConfigType": "Color3", "r": 1, "g": 0.968627, "b": 0.835294 }, "multiplierBase": 1.38, "multiplierPerLevel": 0.2, "passiveBase": 9, "passivePerLevel": 2.5 },
-    "Demonic": { "displayName": "Demonic", "rarity": "Uncommon", "shortCode": "DM", "multiplierBase": 2.15, "multiplierPerLevel": 0.34, "passiveBase": 5, "passivePerLevel": 1.5 },
-    "Snowy": { "displayName": "Snowy", "rarity": "Uncommon", "shortCode": "SN", "multiplierBase": 1.7, "multiplierPerLevel": 0.24, "passiveBase": 13, "passivePerLevel": 3 },
-    "Emerald": { "displayName": "Emerald", "rarity": "Rare", "shortCode": "EM", "multiplierBase": 2.75, "multiplierPerLevel": 0.45, "passiveBase": 14, "passivePerLevel": 3.5 },
-    "Galactic": { "displayName": "Galactic", "rarity": "Legendary", "shortCode": "GL", "multiplierBase": 5, "multiplierPerLevel": 0.8, "passiveBase": 10, "passivePerLevel": 2.5 }
+ "Pets": {
+    "Common": { "displayName": "Common", "rarity": "Common", "shortCode": "CM", "primaryColor": { "__liveConfigType": "Color3", "r": 0.698039, "g": 0.772549, "b": 0.890196 }, "accentColor": { "__liveConfigType": "Color3", "r": 0.92549, "g": 0.952941, "b": 1 }, "multiplierBase": 1.2, "multiplierPerLevel": 0.16, "passiveBase": 7, "passivePerLevel": 2, "custom": {} },
+    "Angel": { "displayName": "Angel", "rarity": "Common", "shortCode": "AN", "primaryColor": { "__liveConfigType": "Color3", "r": 1, "g": 0.858824, "b": 0.556863 }, "accentColor": { "__liveConfigType": "Color3", "r": 1, "g": 0.968627, "b": 0.835294 }, "multiplierBase": 1.38, "multiplierPerLevel": 0.2, "passiveBase": 9, "passivePerLevel": 2.5, "custom": {} },
+    "Demonic": { "displayName": "Demonic", "rarity": "Uncommon", "shortCode": "DM", "multiplierBase": 2.15, "multiplierPerLevel": 0.34, "passiveBase": 5, "passivePerLevel": 1.5, "custom": {} },
+    "Snowy": { "displayName": "Snowy", "rarity": "Uncommon", "shortCode": "SN", "multiplierBase": 1.7, "multiplierPerLevel": 0.24, "passiveBase": 13, "passivePerLevel": 3, "custom": {} },
+    "Emerald": { "displayName": "Emerald", "rarity": "Rare", "shortCode": "EM", "multiplierBase": 2.75, "multiplierPerLevel": 0.45, "passiveBase": 14, "passivePerLevel": 3.5, "custom": {} },
+    "Galactic": { "displayName": "Galactic", "rarity": "Legendary", "shortCode": "GL", "multiplierBase": 5, "multiplierPerLevel": 0.8, "passiveBase": 10, "passivePerLevel": 2.5, "custom": {} }
   }
 }
 ]]
@@ -55,6 +55,7 @@ PetConfig.Pets = {
 		multiplierPerLevel = 0.16,
 		passiveBase = 7,
 		passivePerLevel = 2,
+		custom = {},
 	},
 	Angel = {
 		displayName = "Angel",
@@ -67,6 +68,7 @@ PetConfig.Pets = {
 		multiplierPerLevel = 0.2,
 		passiveBase = 9,
 		passivePerLevel = 2.5,
+		custom = {},
 	},
 	Demonic = {
 		displayName = "Demonic",
@@ -79,6 +81,7 @@ PetConfig.Pets = {
 		multiplierPerLevel = 0.34,
 		passiveBase = 5,
 		passivePerLevel = 1.5,
+		custom = {},
 	},
 	Snowy = {
 		displayName = "Snowy",
@@ -91,6 +94,7 @@ PetConfig.Pets = {
 		multiplierPerLevel = 0.24,
 		passiveBase = 13,
 		passivePerLevel = 3,
+		custom = {},
 	},
 	Emerald = {
 		displayName = "Emerald",
@@ -103,6 +107,7 @@ PetConfig.Pets = {
 		multiplierPerLevel = 0.45,
 		passiveBase = 14,
 		passivePerLevel = 3.5,
+		custom = {},
 	},
 	Galactic = {
 		displayName = "Galactic",
@@ -115,6 +120,7 @@ PetConfig.Pets = {
 		multiplierPerLevel = 0.8,
 		passiveBase = 10,
 		passivePerLevel = 2.5,
+		custom = {},
 	},
 }
 
@@ -135,6 +141,12 @@ function PetConfig.getDefinition(petId)
 	end
 
 	return definition
+end
+
+function PetConfig.getCustomFields(petId)
+	local definition = PetConfig.getDefinition(petId)
+
+	return definition.custom or {}
 end
 
 function PetConfig.clampLevel(level)

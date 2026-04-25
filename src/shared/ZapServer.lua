@@ -166,10 +166,23 @@ if not RunService:IsRunning() then
 			FireList = noop,
 			FireSet = noop
 		}),
+		LiveConfigSnapshot = table.freeze({
+			Fire = noop,
+			FireAll = noop,
+			FireExcept = noop,
+			FireList = noop,
+			FireSet = noop
+		}),
 		GetPlayerState = table.freeze({
 			SetCallback = noop
 		}),
 		GetPetInventory = table.freeze({
+			SetCallback = noop
+		}),
+		GetLiveConfigSnapshot = table.freeze({
+			SetCallback = noop
+		}),
+		GetAchievements = table.freeze({
 			SetCallback = noop
 		}),
 		EquipBestPets = table.freeze({
@@ -180,6 +193,16 @@ if not RunService:IsRunning() then
 		}),
 		DeletePet = table.freeze({
 			SetCallback = noop
+		}),
+		ClaimAchievement = table.freeze({
+			SetCallback = noop
+		}),
+		AchievementSnapshot = table.freeze({
+			Fire = noop,
+			FireAll = noop,
+			FireExcept = noop,
+			FireList = noop,
+			FireSet = noop
 		}),
 	}) :: Events
 end
@@ -230,7 +253,7 @@ end
 
 RunService.Heartbeat:Connect(SendEvents)
 
-local reliable_events = table.create(11)
+local reliable_events = table.create(14)
 reliable.OnServerEvent:Connect(function(player, buff, inst)
 	incoming_buff = buff
 	incoming_inst = inst
@@ -244,19 +267,19 @@ reliable.OnServerEvent:Connect(function(player, buff, inst)
 			if reliable_events[0] then
 				task.spawn(reliable_events[0], player, value)
 			end
-		elseif id == 9 then -- UpgradePet
+		elseif id == 11 then -- UpgradePet
 			local call_id = buffer.readu8(buff, read(1))
 			local value
 			local len_1 = buffer.readu8(incoming_buff, read(1))
 			assert(len_1 <= 192, "value is more than 192!")
 			value = buffer.readstring(incoming_buff, read(len_1), len_1)
 			assert(utf8.len(value) ~= nil, "value is not valid utf-8")
-			if reliable_events[9] then
+			if reliable_events[11] then
 				task.spawn(function(player_2, call_id_2, value_1)
-					local ret_1 = reliable_events[9](player_2, value_1)
+					local ret_1 = reliable_events[11](player_2, value_1)
 					load_player(player_2)
 					alloc(1)
-					buffer.writeu8(outgoing_buff, outgoing_apos, 10)
+					buffer.writeu8(outgoing_buff, outgoing_apos, 14)
 					alloc(1)
 					buffer.writeu8(outgoing_buff, outgoing_apos, call_id_2)
 					local bool_1 = 0
@@ -275,7 +298,7 @@ reliable.OnServerEvent:Connect(function(player, buff, inst)
 					player_map[player_2] = save()
 				end, player, call_id, value)
 			end
-		elseif id == 3 then -- SummonPets
+		elseif id == 5 then -- SummonPets
 			local call_id = buffer.readu8(buff, read(1))
 			local value
 			value = {  }
@@ -297,12 +320,12 @@ reliable.OnServerEvent:Connect(function(player, buff, inst)
 				assert(utf8.len(val_1) ~= nil, "value is not valid utf-8")
 				value["autoDeletePetIds"][i_1] = val_1
 			end
-			if reliable_events[3] then
+			if reliable_events[5] then
 				task.spawn(function(player_2, call_id_2, value_1)
-					local ret_1 = reliable_events[3](player_2, value_1)
+					local ret_1 = reliable_events[5](player_2, value_1)
 					load_player(player_2)
 					alloc(1)
-					buffer.writeu8(outgoing_buff, outgoing_apos, 4)
+					buffer.writeu8(outgoing_buff, outgoing_apos, 8)
 					alloc(1)
 					buffer.writeu8(outgoing_buff, outgoing_apos, call_id_2)
 					local bool_2 = 0
@@ -363,7 +386,7 @@ reliable.OnServerEvent:Connect(function(player, buff, inst)
 					player_map[player_2] = save()
 				end, player, call_id, value)
 			end
-		elseif id == 6 then -- SetPetEquipped
+		elseif id == 8 then -- SetPetEquipped
 			local call_id = buffer.readu8(buff, read(1))
 			local value
 			local bool_4 = buffer.readu8(incoming_buff, read(1))
@@ -373,12 +396,12 @@ reliable.OnServerEvent:Connect(function(player, buff, inst)
 			value["uid"] = buffer.readstring(incoming_buff, read(len_11), len_11)
 			assert(utf8.len(value["uid"]) ~= nil, "value is not valid utf-8")
 			value["equipped"] = bit32.btest(bool_4, 0b0000000000000001)
-			if reliable_events[6] then
+			if reliable_events[8] then
 				task.spawn(function(player_2, call_id_2, value_1)
-					local ret_1 = reliable_events[6](player_2, value_1)
+					local ret_1 = reliable_events[8](player_2, value_1)
 					load_player(player_2)
 					alloc(1)
-					buffer.writeu8(outgoing_buff, outgoing_apos, 7)
+					buffer.writeu8(outgoing_buff, outgoing_apos, 11)
 					alloc(1)
 					buffer.writeu8(outgoing_buff, outgoing_apos, call_id_2)
 					local bool_5 = 0
@@ -397,19 +420,19 @@ reliable.OnServerEvent:Connect(function(player, buff, inst)
 					player_map[player_2] = save()
 				end, player, call_id, value)
 			end
-		elseif id == 4 then -- PurchaseUpgrade
+		elseif id == 6 then -- PurchaseUpgrade
 			local call_id = buffer.readu8(buff, read(1))
 			local value
 			local len_13 = buffer.readu8(incoming_buff, read(1))
 			assert(len_13 <= 128, "value is more than 128!")
 			value = buffer.readstring(incoming_buff, read(len_13), len_13)
 			assert(utf8.len(value) ~= nil, "value is not valid utf-8")
-			if reliable_events[4] then
+			if reliable_events[6] then
 				task.spawn(function(player_2, call_id_2, value_1)
-					local ret_1 = reliable_events[4](player_2, value_1)
+					local ret_1 = reliable_events[6](player_2, value_1)
 					load_player(player_2)
 					alloc(1)
-					buffer.writeu8(outgoing_buff, outgoing_apos, 5)
+					buffer.writeu8(outgoing_buff, outgoing_apos, 9)
 					alloc(1)
 					buffer.writeu8(outgoing_buff, outgoing_apos, call_id_2)
 					local bool_6 = 0
@@ -428,19 +451,19 @@ reliable.OnServerEvent:Connect(function(player, buff, inst)
 					player_map[player_2] = save()
 				end, player, call_id, value)
 			end
-		elseif id == 5 then -- PurchaseBootUpgrade
+		elseif id == 7 then -- PurchaseBootUpgrade
 			local call_id = buffer.readu8(buff, read(1))
 			local value
 			local len_15 = buffer.readu8(incoming_buff, read(1))
 			assert(len_15 <= 128, "value is more than 128!")
 			value = buffer.readstring(incoming_buff, read(len_15), len_15)
 			assert(utf8.len(value) ~= nil, "value is not valid utf-8")
-			if reliable_events[5] then
+			if reliable_events[7] then
 				task.spawn(function(player_2, call_id_2, value_1)
-					local ret_1 = reliable_events[5](player_2, value_1)
+					local ret_1 = reliable_events[7](player_2, value_1)
 					load_player(player_2)
 					alloc(1)
-					buffer.writeu8(outgoing_buff, outgoing_apos, 6)
+					buffer.writeu8(outgoing_buff, outgoing_apos, 10)
 					alloc(1)
 					buffer.writeu8(outgoing_buff, outgoing_apos, call_id_2)
 					local bool_7 = 0
@@ -467,7 +490,7 @@ reliable.OnServerEvent:Connect(function(player, buff, inst)
 					local ret_1 = reliable_events[1](player_2, value_1)
 					load_player(player_2)
 					alloc(1)
-					buffer.writeu8(outgoing_buff, outgoing_apos, 2)
+					buffer.writeu8(outgoing_buff, outgoing_apos, 4)
 					alloc(1)
 					buffer.writeu8(outgoing_buff, outgoing_apos, call_id_2)
 					local bool_8 = 0
@@ -582,7 +605,7 @@ reliable.OnServerEvent:Connect(function(player, buff, inst)
 					local ret_1 = reliable_events[2](player_2, value_1)
 					load_player(player_2)
 					alloc(1)
-					buffer.writeu8(outgoing_buff, outgoing_apos, 3)
+					buffer.writeu8(outgoing_buff, outgoing_apos, 5)
 					alloc(1)
 					buffer.writeu8(outgoing_buff, outgoing_apos, call_id_2)
 					alloc(1)
@@ -629,84 +652,118 @@ reliable.OnServerEvent:Connect(function(player, buff, inst)
 					player_map[player_2] = save()
 				end, player, call_id, value)
 			end
-		elseif id == 10 then -- EquipBestPets
+		elseif id == 4 then -- GetLiveConfigSnapshot
 			local call_id = buffer.readu8(buff, read(1))
 			local value
-			if reliable_events[10] then
+			local len_20 = buffer.readu16(incoming_buff, read(2))
+			assert(len_20 <= 256, "value is more than 256!")
+			value = buffer.readstring(incoming_buff, read(len_20), len_20)
+			assert(utf8.len(value) ~= nil, "value is not valid utf-8")
+			if reliable_events[4] then
 				task.spawn(function(player_2, call_id_2, value_1)
-					local ret_1 = reliable_events[10](player_2, value_1)
+					local ret_1 = reliable_events[4](player_2, value_1)
 					load_player(player_2)
 					alloc(1)
-					buffer.writeu8(outgoing_buff, outgoing_apos, 11)
+					buffer.writeu8(outgoing_buff, outgoing_apos, 7)
 					alloc(1)
 					buffer.writeu8(outgoing_buff, outgoing_apos, call_id_2)
 					local bool_10 = 0
 					local bool_10_pos_1 = alloc(1)
-					if ret_1["success"] then
+					if ret_1["found"] then
 						bool_10 = bit32.bor(bool_10, 0b0000000000000001)
 					end
-					local len_20 = #ret_1["message"]
-					assert(len_20 <= 640, "value is more than 640!")
-					assert(utf8.len(ret_1["message"]) ~= nil, "value is not valid utf-8")
-					alloc(2)
-					buffer.writeu16(outgoing_buff, outgoing_apos, len_20)
-					alloc(len_20)
-					buffer.writestring(outgoing_buff, outgoing_apos, ret_1["message"], len_20)
+					local len_21 = #ret_1["payloadJson"]
+					assert(len_21 <= 262140, "value is more than 262140!")
+					assert(utf8.len(ret_1["payloadJson"]) ~= nil, "value is not valid utf-8")
+					alloc(4)
+					buffer.writeu32(outgoing_buff, outgoing_apos, len_21)
+					alloc(len_21)
+					buffer.writestring(outgoing_buff, outgoing_apos, ret_1["payloadJson"], len_21)
 					buffer.writeu8(outgoing_buff, bool_10_pos_1, bool_10)
 					player_map[player_2] = save()
 				end, player, call_id, value)
 			end
-		elseif id == 8 then -- DeletePets
+		elseif id == 3 then -- GetAchievements
 			local call_id = buffer.readu8(buff, read(1))
 			local value
-			local len_21 = buffer.readu8(incoming_buff, read(1))
-			assert(len_21 <= 45, "value is more than 45!")
-			value = table.create(len_21)
-			for i_4 = 1, len_21 do
-				local val_4
-				local len_22 = buffer.readu8(incoming_buff, read(1))
-				assert(len_22 <= 192, "value is more than 192!")
-				val_4 = buffer.readstring(incoming_buff, read(len_22), len_22)
-				assert(utf8.len(val_4) ~= nil, "value is not valid utf-8")
-				value[i_4] = val_4
-			end
-			if reliable_events[8] then
+			if reliable_events[3] then
 				task.spawn(function(player_2, call_id_2, value_1)
-					local ret_1 = reliable_events[8](player_2, value_1)
+					local ret_1 = reliable_events[3](player_2, value_1)
 					load_player(player_2)
 					alloc(1)
-					buffer.writeu8(outgoing_buff, outgoing_apos, 9)
+					buffer.writeu8(outgoing_buff, outgoing_apos, 6)
 					alloc(1)
 					buffer.writeu8(outgoing_buff, outgoing_apos, call_id_2)
-					local bool_11 = 0
-					local bool_11_pos_1 = alloc(1)
-					if ret_1["success"] then
-						bool_11 = bit32.bor(bool_11, 0b0000000000000001)
+					alloc(1)
+					buffer.writeu8(outgoing_buff, outgoing_apos, ret_1["achievementCount"])
+					alloc(1)
+					buffer.writeu8(outgoing_buff, outgoing_apos, ret_1["completedAchievementCount"])
+					alloc(1)
+					buffer.writeu8(outgoing_buff, outgoing_apos, ret_1["claimedAchievementCount"])
+					local len_22 = #ret_1["achievements"]
+					assert(len_22 <= 32, "value is more than 32!")
+					alloc(1)
+					buffer.writeu8(outgoing_buff, outgoing_apos, len_22)
+					for i_4 = 1, len_22 do
+						local bool_11 = 0
+						local bool_11_pos_1 = alloc(1)
+						local val_4 = ret_1["achievements"][i_4]
+						local len_23 = #val_4["id"]
+						assert(len_23 <= 128, "value is more than 128!")
+						assert(utf8.len(val_4["id"]) ~= nil, "value is not valid utf-8")
+						alloc(1)
+						buffer.writeu8(outgoing_buff, outgoing_apos, len_23)
+						alloc(len_23)
+						buffer.writestring(outgoing_buff, outgoing_apos, val_4["id"], len_23)
+						local len_24 = #val_4["displayName"]
+						assert(len_24 <= 256, "value is more than 256!")
+						assert(utf8.len(val_4["displayName"]) ~= nil, "value is not valid utf-8")
+						alloc(2)
+						buffer.writeu16(outgoing_buff, outgoing_apos, len_24)
+						alloc(len_24)
+						buffer.writestring(outgoing_buff, outgoing_apos, val_4["displayName"], len_24)
+						local len_25 = #val_4["description"]
+						assert(len_25 <= 640, "value is more than 640!")
+						assert(utf8.len(val_4["description"]) ~= nil, "value is not valid utf-8")
+						alloc(2)
+						buffer.writeu16(outgoing_buff, outgoing_apos, len_25)
+						alloc(len_25)
+						buffer.writestring(outgoing_buff, outgoing_apos, val_4["description"], len_25)
+						local len_26 = #val_4["type"]
+						assert(len_26 <= 128, "value is more than 128!")
+						assert(utf8.len(val_4["type"]) ~= nil, "value is not valid utf-8")
+						alloc(1)
+						buffer.writeu8(outgoing_buff, outgoing_apos, len_26)
+						alloc(len_26)
+						buffer.writestring(outgoing_buff, outgoing_apos, val_4["type"], len_26)
+						alloc(8)
+						buffer.writef64(outgoing_buff, outgoing_apos, val_4["progress"])
+						alloc(8)
+						buffer.writef64(outgoing_buff, outgoing_apos, val_4["target"])
+						if val_4["isComplete"] then
+							bool_11 = bit32.bor(bool_11, 0b0000000000000001)
+						end
+						if val_4["isClaimed"] then
+							bool_11 = bit32.bor(bool_11, 0b0000000000000010)
+						end
+						alloc(4)
+						buffer.writeu32(outgoing_buff, outgoing_apos, val_4["rewardFootgems"])
+						alloc(4)
+						buffer.writeu32(outgoing_buff, outgoing_apos, val_4["rewardFootcores"])
+						buffer.writeu8(outgoing_buff, bool_11_pos_1, bool_11)
 					end
-					local len_23 = #ret_1["message"]
-					assert(len_23 <= 640, "value is more than 640!")
-					assert(utf8.len(ret_1["message"]) ~= nil, "value is not valid utf-8")
-					alloc(2)
-					buffer.writeu16(outgoing_buff, outgoing_apos, len_23)
-					alloc(len_23)
-					buffer.writestring(outgoing_buff, outgoing_apos, ret_1["message"], len_23)
-					buffer.writeu8(outgoing_buff, bool_11_pos_1, bool_11)
 					player_map[player_2] = save()
 				end, player, call_id, value)
 			end
-		elseif id == 7 then -- DeletePet
+		elseif id == 12 then -- EquipBestPets
 			local call_id = buffer.readu8(buff, read(1))
 			local value
-			local len_24 = buffer.readu8(incoming_buff, read(1))
-			assert(len_24 <= 192, "value is more than 192!")
-			value = buffer.readstring(incoming_buff, read(len_24), len_24)
-			assert(utf8.len(value) ~= nil, "value is not valid utf-8")
-			if reliable_events[7] then
+			if reliable_events[12] then
 				task.spawn(function(player_2, call_id_2, value_1)
-					local ret_1 = reliable_events[7](player_2, value_1)
+					local ret_1 = reliable_events[12](player_2, value_1)
 					load_player(player_2)
 					alloc(1)
-					buffer.writeu8(outgoing_buff, outgoing_apos, 8)
+					buffer.writeu8(outgoing_buff, outgoing_apos, 15)
 					alloc(1)
 					buffer.writeu8(outgoing_buff, outgoing_apos, call_id_2)
 					local bool_12 = 0
@@ -714,14 +771,118 @@ reliable.OnServerEvent:Connect(function(player, buff, inst)
 					if ret_1["success"] then
 						bool_12 = bit32.bor(bool_12, 0b0000000000000001)
 					end
-					local len_25 = #ret_1["message"]
-					assert(len_25 <= 640, "value is more than 640!")
+					local len_27 = #ret_1["message"]
+					assert(len_27 <= 640, "value is more than 640!")
 					assert(utf8.len(ret_1["message"]) ~= nil, "value is not valid utf-8")
 					alloc(2)
-					buffer.writeu16(outgoing_buff, outgoing_apos, len_25)
-					alloc(len_25)
-					buffer.writestring(outgoing_buff, outgoing_apos, ret_1["message"], len_25)
+					buffer.writeu16(outgoing_buff, outgoing_apos, len_27)
+					alloc(len_27)
+					buffer.writestring(outgoing_buff, outgoing_apos, ret_1["message"], len_27)
 					buffer.writeu8(outgoing_buff, bool_12_pos_1, bool_12)
+					player_map[player_2] = save()
+				end, player, call_id, value)
+			end
+		elseif id == 10 then -- DeletePets
+			local call_id = buffer.readu8(buff, read(1))
+			local value
+			local len_28 = buffer.readu8(incoming_buff, read(1))
+			assert(len_28 <= 45, "value is more than 45!")
+			value = table.create(len_28)
+			for i_5 = 1, len_28 do
+				local val_5
+				local len_29 = buffer.readu8(incoming_buff, read(1))
+				assert(len_29 <= 192, "value is more than 192!")
+				val_5 = buffer.readstring(incoming_buff, read(len_29), len_29)
+				assert(utf8.len(val_5) ~= nil, "value is not valid utf-8")
+				value[i_5] = val_5
+			end
+			if reliable_events[10] then
+				task.spawn(function(player_2, call_id_2, value_1)
+					local ret_1 = reliable_events[10](player_2, value_1)
+					load_player(player_2)
+					alloc(1)
+					buffer.writeu8(outgoing_buff, outgoing_apos, 13)
+					alloc(1)
+					buffer.writeu8(outgoing_buff, outgoing_apos, call_id_2)
+					local bool_13 = 0
+					local bool_13_pos_1 = alloc(1)
+					if ret_1["success"] then
+						bool_13 = bit32.bor(bool_13, 0b0000000000000001)
+					end
+					local len_30 = #ret_1["message"]
+					assert(len_30 <= 640, "value is more than 640!")
+					assert(utf8.len(ret_1["message"]) ~= nil, "value is not valid utf-8")
+					alloc(2)
+					buffer.writeu16(outgoing_buff, outgoing_apos, len_30)
+					alloc(len_30)
+					buffer.writestring(outgoing_buff, outgoing_apos, ret_1["message"], len_30)
+					buffer.writeu8(outgoing_buff, bool_13_pos_1, bool_13)
+					player_map[player_2] = save()
+				end, player, call_id, value)
+			end
+		elseif id == 9 then -- DeletePet
+			local call_id = buffer.readu8(buff, read(1))
+			local value
+			local len_31 = buffer.readu8(incoming_buff, read(1))
+			assert(len_31 <= 192, "value is more than 192!")
+			value = buffer.readstring(incoming_buff, read(len_31), len_31)
+			assert(utf8.len(value) ~= nil, "value is not valid utf-8")
+			if reliable_events[9] then
+				task.spawn(function(player_2, call_id_2, value_1)
+					local ret_1 = reliable_events[9](player_2, value_1)
+					load_player(player_2)
+					alloc(1)
+					buffer.writeu8(outgoing_buff, outgoing_apos, 12)
+					alloc(1)
+					buffer.writeu8(outgoing_buff, outgoing_apos, call_id_2)
+					local bool_14 = 0
+					local bool_14_pos_1 = alloc(1)
+					if ret_1["success"] then
+						bool_14 = bit32.bor(bool_14, 0b0000000000000001)
+					end
+					local len_32 = #ret_1["message"]
+					assert(len_32 <= 640, "value is more than 640!")
+					assert(utf8.len(ret_1["message"]) ~= nil, "value is not valid utf-8")
+					alloc(2)
+					buffer.writeu16(outgoing_buff, outgoing_apos, len_32)
+					alloc(len_32)
+					buffer.writestring(outgoing_buff, outgoing_apos, ret_1["message"], len_32)
+					buffer.writeu8(outgoing_buff, bool_14_pos_1, bool_14)
+					player_map[player_2] = save()
+				end, player, call_id, value)
+			end
+		elseif id == 13 then -- ClaimAchievement
+			local call_id = buffer.readu8(buff, read(1))
+			local value
+			local len_33 = buffer.readu8(incoming_buff, read(1))
+			assert(len_33 <= 128, "value is more than 128!")
+			value = buffer.readstring(incoming_buff, read(len_33), len_33)
+			assert(utf8.len(value) ~= nil, "value is not valid utf-8")
+			if reliable_events[13] then
+				task.spawn(function(player_2, call_id_2, value_1)
+					local ret_1 = reliable_events[13](player_2, value_1)
+					load_player(player_2)
+					alloc(1)
+					buffer.writeu8(outgoing_buff, outgoing_apos, 16)
+					alloc(1)
+					buffer.writeu8(outgoing_buff, outgoing_apos, call_id_2)
+					local bool_15 = 0
+					local bool_15_pos_1 = alloc(1)
+					if ret_1["success"] then
+						bool_15 = bit32.bor(bool_15, 0b0000000000000001)
+					end
+					local len_34 = #ret_1["message"]
+					assert(len_34 <= 640, "value is more than 640!")
+					assert(utf8.len(ret_1["message"]) ~= nil, "value is not valid utf-8")
+					alloc(2)
+					buffer.writeu16(outgoing_buff, outgoing_apos, len_34)
+					alloc(len_34)
+					buffer.writestring(outgoing_buff, outgoing_apos, ret_1["message"], len_34)
+					alloc(4)
+					buffer.writeu32(outgoing_buff, outgoing_apos, ret_1["awardedFootgems"])
+					alloc(4)
+					buffer.writeu32(outgoing_buff, outgoing_apos, ret_1["awardedFootcores"])
+					buffer.writeu8(outgoing_buff, bool_15_pos_1, bool_15)
 					player_map[player_2] = save()
 				end, player, call_id, value)
 			end
@@ -740,9 +901,9 @@ local returns = {
 			["success"]: (boolean),
 			["message"]: (string),
 		}))): () -> ()
-			reliable_events[9] = Callback
+			reliable_events[11] = Callback
 			return function()
-				reliable_events[9] = nil
+				reliable_events[11] = nil
 			end
 		end,
 	},
@@ -764,9 +925,9 @@ local returns = {
 				["autoDeleted"]: (boolean),
 			}) }),
 		}))): () -> ()
-			reliable_events[3] = Callback
+			reliable_events[5] = Callback
 			return function()
-				reliable_events[3] = nil
+				reliable_events[5] = nil
 			end
 		end,
 	},
@@ -778,9 +939,9 @@ local returns = {
 			["success"]: (boolean),
 			["message"]: (string),
 		}))): () -> ()
-			reliable_events[6] = Callback
+			reliable_events[8] = Callback
 			return function()
-				reliable_events[6] = nil
+				reliable_events[8] = nil
 			end
 		end,
 	},
@@ -797,9 +958,9 @@ local returns = {
 			["success"]: (boolean),
 			["message"]: (string),
 		}))): () -> ()
-			reliable_events[4] = Callback
+			reliable_events[6] = Callback
 			return function()
-				reliable_events[4] = nil
+				reliable_events[6] = nil
 			end
 		end,
 	},
@@ -808,9 +969,9 @@ local returns = {
 			["success"]: (boolean),
 			["message"]: (string),
 		}))): () -> ()
-			reliable_events[5] = Callback
+			reliable_events[7] = Callback
 			return function()
-				reliable_events[5] = nil
+				reliable_events[7] = nil
 			end
 		end,
 	},
@@ -863,481 +1024,6 @@ local returns = {
 			["cooldownEndsAt"]: (number),
 		}))
 			load_player(Player)
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, 0)
-			local bool_13 = 0
-			local bool_13_pos_1 = alloc(1)
-			alloc(4)
-			buffer.writeu32(outgoing_buff, outgoing_apos, Value["footyens"])
-			alloc(4)
-			buffer.writeu32(outgoing_buff, outgoing_apos, Value["footgems"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["totalDistance"])
-			alloc(4)
-			buffer.writeu32(outgoing_buff, outgoing_apos, Value["bootsCollected"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["activeBoots"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["movementSpeedLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["studsPerCurrencyLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["currencyMultiplierLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootValueLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["spawnRateLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["maxActiveBootsLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["pickupRadiusLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootLifetimeLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["goldenChanceLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["goldenMultiplierLevel"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["movementSpeed"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["studsPerCurrency"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["currencyMultiplier"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootValue"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootSpawnInterval"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootMaxActive"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootPickupRadius"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootLifetime"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootGoldenChance"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootGoldenMultiplier"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petInventoryLimit"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEmptySlots"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petInventoryCount"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEquipLimit"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["equippedPetCount"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["petFootyenMultiplier"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["petPassivePerSecond"])
-			if Value["shopHasFootyenGain10x"] then
-				bool_13 = bit32.bor(bool_13, 0b0000000000000001)
-			end
-			if Value["shopHasMovementSpeed5x"] then
-				bool_13 = bit32.bor(bool_13, 0b0000000000000010)
-			end
-			if Value["shopHasTripleSummon"] then
-				bool_13 = bit32.bor(bool_13, 0b0000000000000100)
-			end
-			if Value["shopHasExtraEquipTwo"] then
-				bool_13 = bit32.bor(bool_13, 0b0000000000001000)
-			end
-			if Value["shopHasLuckySummon"] then
-				bool_13 = bit32.bor(bool_13, 0b0000000000010000)
-			end
-			if Value["shopHasBootMagnet"] then
-				bool_13 = bit32.bor(bool_13, 0b0000000000100000)
-			end
-			if Value["shopHasPetPassiveAura"] then
-				bool_13 = bit32.bor(bool_13, 0b0000000001000000)
-			end
-			alloc(2)
-			buffer.writeu16(outgoing_buff, outgoing_apos, Value["shopExtraPetSlotsCount"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["shopPetPassiveOverclockCount"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["shopBootValueCoreCount"])
-			if Value["isSprinting"] then
-				bool_13 = bit32.bor(bool_13, 0b0000000010000000)
-			end
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["sprintEndsAt"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["cooldownEndsAt"])
-			buffer.writeu8(outgoing_buff, bool_13_pos_1, bool_13)
-			player_map[Player] = save()
-		end,
-		FireAll = function(Value: ({
-			["footyens"]: (number),
-			["footgems"]: (number),
-			["totalDistance"]: (number),
-			["bootsCollected"]: (number),
-			["activeBoots"]: (number),
-			["movementSpeedLevel"]: (number),
-			["studsPerCurrencyLevel"]: (number),
-			["currencyMultiplierLevel"]: (number),
-			["bootValueLevel"]: (number),
-			["spawnRateLevel"]: (number),
-			["maxActiveBootsLevel"]: (number),
-			["pickupRadiusLevel"]: (number),
-			["bootLifetimeLevel"]: (number),
-			["goldenChanceLevel"]: (number),
-			["goldenMultiplierLevel"]: (number),
-			["movementSpeed"]: (number),
-			["studsPerCurrency"]: (number),
-			["currencyMultiplier"]: (number),
-			["bootValue"]: (number),
-			["bootSpawnInterval"]: (number),
-			["bootMaxActive"]: (number),
-			["bootPickupRadius"]: (number),
-			["bootLifetime"]: (number),
-			["bootGoldenChance"]: (number),
-			["bootGoldenMultiplier"]: (number),
-			["petInventoryLimit"]: (number),
-			["petEmptySlots"]: (number),
-			["petInventoryCount"]: (number),
-			["petEquipLimit"]: (number),
-			["equippedPetCount"]: (number),
-			["petFootyenMultiplier"]: (number),
-			["petPassivePerSecond"]: (number),
-			["shopHasFootyenGain10x"]: (boolean),
-			["shopHasMovementSpeed5x"]: (boolean),
-			["shopHasTripleSummon"]: (boolean),
-			["shopHasExtraEquipTwo"]: (boolean),
-			["shopHasLuckySummon"]: (boolean),
-			["shopHasBootMagnet"]: (boolean),
-			["shopHasPetPassiveAura"]: (boolean),
-			["shopExtraPetSlotsCount"]: (number),
-			["shopPetPassiveOverclockCount"]: (number),
-			["shopBootValueCoreCount"]: (number),
-			["isSprinting"]: (boolean),
-			["sprintEndsAt"]: (number),
-			["cooldownEndsAt"]: (number),
-		}))
-			load_empty()
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, 0)
-			local bool_14 = 0
-			local bool_14_pos_1 = alloc(1)
-			alloc(4)
-			buffer.writeu32(outgoing_buff, outgoing_apos, Value["footyens"])
-			alloc(4)
-			buffer.writeu32(outgoing_buff, outgoing_apos, Value["footgems"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["totalDistance"])
-			alloc(4)
-			buffer.writeu32(outgoing_buff, outgoing_apos, Value["bootsCollected"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["activeBoots"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["movementSpeedLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["studsPerCurrencyLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["currencyMultiplierLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootValueLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["spawnRateLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["maxActiveBootsLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["pickupRadiusLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootLifetimeLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["goldenChanceLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["goldenMultiplierLevel"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["movementSpeed"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["studsPerCurrency"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["currencyMultiplier"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootValue"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootSpawnInterval"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootMaxActive"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootPickupRadius"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootLifetime"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootGoldenChance"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootGoldenMultiplier"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petInventoryLimit"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEmptySlots"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petInventoryCount"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEquipLimit"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["equippedPetCount"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["petFootyenMultiplier"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["petPassivePerSecond"])
-			if Value["shopHasFootyenGain10x"] then
-				bool_14 = bit32.bor(bool_14, 0b0000000000000001)
-			end
-			if Value["shopHasMovementSpeed5x"] then
-				bool_14 = bit32.bor(bool_14, 0b0000000000000010)
-			end
-			if Value["shopHasTripleSummon"] then
-				bool_14 = bit32.bor(bool_14, 0b0000000000000100)
-			end
-			if Value["shopHasExtraEquipTwo"] then
-				bool_14 = bit32.bor(bool_14, 0b0000000000001000)
-			end
-			if Value["shopHasLuckySummon"] then
-				bool_14 = bit32.bor(bool_14, 0b0000000000010000)
-			end
-			if Value["shopHasBootMagnet"] then
-				bool_14 = bit32.bor(bool_14, 0b0000000000100000)
-			end
-			if Value["shopHasPetPassiveAura"] then
-				bool_14 = bit32.bor(bool_14, 0b0000000001000000)
-			end
-			alloc(2)
-			buffer.writeu16(outgoing_buff, outgoing_apos, Value["shopExtraPetSlotsCount"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["shopPetPassiveOverclockCount"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["shopBootValueCoreCount"])
-			if Value["isSprinting"] then
-				bool_14 = bit32.bor(bool_14, 0b0000000010000000)
-			end
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["sprintEndsAt"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["cooldownEndsAt"])
-			buffer.writeu8(outgoing_buff, bool_14_pos_1, bool_14)
-			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
-			for _, player in Players:GetPlayers() do
-				load_player(player)
-				alloc(used)
-				buffer.copy(outgoing_buff, outgoing_apos, buff, 0, used)
-				table.move(inst, 1, #inst, #outgoing_inst + 1, outgoing_inst)
-				player_map[player] = save()
-			end
-		end,
-		FireExcept = function(Except: Player, Value: ({
-			["footyens"]: (number),
-			["footgems"]: (number),
-			["totalDistance"]: (number),
-			["bootsCollected"]: (number),
-			["activeBoots"]: (number),
-			["movementSpeedLevel"]: (number),
-			["studsPerCurrencyLevel"]: (number),
-			["currencyMultiplierLevel"]: (number),
-			["bootValueLevel"]: (number),
-			["spawnRateLevel"]: (number),
-			["maxActiveBootsLevel"]: (number),
-			["pickupRadiusLevel"]: (number),
-			["bootLifetimeLevel"]: (number),
-			["goldenChanceLevel"]: (number),
-			["goldenMultiplierLevel"]: (number),
-			["movementSpeed"]: (number),
-			["studsPerCurrency"]: (number),
-			["currencyMultiplier"]: (number),
-			["bootValue"]: (number),
-			["bootSpawnInterval"]: (number),
-			["bootMaxActive"]: (number),
-			["bootPickupRadius"]: (number),
-			["bootLifetime"]: (number),
-			["bootGoldenChance"]: (number),
-			["bootGoldenMultiplier"]: (number),
-			["petInventoryLimit"]: (number),
-			["petEmptySlots"]: (number),
-			["petInventoryCount"]: (number),
-			["petEquipLimit"]: (number),
-			["equippedPetCount"]: (number),
-			["petFootyenMultiplier"]: (number),
-			["petPassivePerSecond"]: (number),
-			["shopHasFootyenGain10x"]: (boolean),
-			["shopHasMovementSpeed5x"]: (boolean),
-			["shopHasTripleSummon"]: (boolean),
-			["shopHasExtraEquipTwo"]: (boolean),
-			["shopHasLuckySummon"]: (boolean),
-			["shopHasBootMagnet"]: (boolean),
-			["shopHasPetPassiveAura"]: (boolean),
-			["shopExtraPetSlotsCount"]: (number),
-			["shopPetPassiveOverclockCount"]: (number),
-			["shopBootValueCoreCount"]: (number),
-			["isSprinting"]: (boolean),
-			["sprintEndsAt"]: (number),
-			["cooldownEndsAt"]: (number),
-		}))
-			load_empty()
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, 0)
-			local bool_15 = 0
-			local bool_15_pos_1 = alloc(1)
-			alloc(4)
-			buffer.writeu32(outgoing_buff, outgoing_apos, Value["footyens"])
-			alloc(4)
-			buffer.writeu32(outgoing_buff, outgoing_apos, Value["footgems"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["totalDistance"])
-			alloc(4)
-			buffer.writeu32(outgoing_buff, outgoing_apos, Value["bootsCollected"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["activeBoots"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["movementSpeedLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["studsPerCurrencyLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["currencyMultiplierLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootValueLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["spawnRateLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["maxActiveBootsLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["pickupRadiusLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootLifetimeLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["goldenChanceLevel"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["goldenMultiplierLevel"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["movementSpeed"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["studsPerCurrency"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["currencyMultiplier"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootValue"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootSpawnInterval"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootMaxActive"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootPickupRadius"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootLifetime"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootGoldenChance"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootGoldenMultiplier"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petInventoryLimit"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEmptySlots"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petInventoryCount"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEquipLimit"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["equippedPetCount"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["petFootyenMultiplier"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["petPassivePerSecond"])
-			if Value["shopHasFootyenGain10x"] then
-				bool_15 = bit32.bor(bool_15, 0b0000000000000001)
-			end
-			if Value["shopHasMovementSpeed5x"] then
-				bool_15 = bit32.bor(bool_15, 0b0000000000000010)
-			end
-			if Value["shopHasTripleSummon"] then
-				bool_15 = bit32.bor(bool_15, 0b0000000000000100)
-			end
-			if Value["shopHasExtraEquipTwo"] then
-				bool_15 = bit32.bor(bool_15, 0b0000000000001000)
-			end
-			if Value["shopHasLuckySummon"] then
-				bool_15 = bit32.bor(bool_15, 0b0000000000010000)
-			end
-			if Value["shopHasBootMagnet"] then
-				bool_15 = bit32.bor(bool_15, 0b0000000000100000)
-			end
-			if Value["shopHasPetPassiveAura"] then
-				bool_15 = bit32.bor(bool_15, 0b0000000001000000)
-			end
-			alloc(2)
-			buffer.writeu16(outgoing_buff, outgoing_apos, Value["shopExtraPetSlotsCount"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["shopPetPassiveOverclockCount"])
-			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, Value["shopBootValueCoreCount"])
-			if Value["isSprinting"] then
-				bool_15 = bit32.bor(bool_15, 0b0000000010000000)
-			end
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["sprintEndsAt"])
-			alloc(8)
-			buffer.writef64(outgoing_buff, outgoing_apos, Value["cooldownEndsAt"])
-			buffer.writeu8(outgoing_buff, bool_15_pos_1, bool_15)
-			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
-			for _, player in Players:GetPlayers() do
-				if player ~= Except then
-					load_player(player)
-					alloc(used)
-					buffer.copy(outgoing_buff, outgoing_apos, buff, 0, used)
-					table.move(inst, 1, #inst, #outgoing_inst + 1, outgoing_inst)
-					player_map[player] = save()
-				end
-			end
-		end,
-		FireList = function(List: { [unknown]: Player }, Value: ({
-			["footyens"]: (number),
-			["footgems"]: (number),
-			["totalDistance"]: (number),
-			["bootsCollected"]: (number),
-			["activeBoots"]: (number),
-			["movementSpeedLevel"]: (number),
-			["studsPerCurrencyLevel"]: (number),
-			["currencyMultiplierLevel"]: (number),
-			["bootValueLevel"]: (number),
-			["spawnRateLevel"]: (number),
-			["maxActiveBootsLevel"]: (number),
-			["pickupRadiusLevel"]: (number),
-			["bootLifetimeLevel"]: (number),
-			["goldenChanceLevel"]: (number),
-			["goldenMultiplierLevel"]: (number),
-			["movementSpeed"]: (number),
-			["studsPerCurrency"]: (number),
-			["currencyMultiplier"]: (number),
-			["bootValue"]: (number),
-			["bootSpawnInterval"]: (number),
-			["bootMaxActive"]: (number),
-			["bootPickupRadius"]: (number),
-			["bootLifetime"]: (number),
-			["bootGoldenChance"]: (number),
-			["bootGoldenMultiplier"]: (number),
-			["petInventoryLimit"]: (number),
-			["petEmptySlots"]: (number),
-			["petInventoryCount"]: (number),
-			["petEquipLimit"]: (number),
-			["equippedPetCount"]: (number),
-			["petFootyenMultiplier"]: (number),
-			["petPassivePerSecond"]: (number),
-			["shopHasFootyenGain10x"]: (boolean),
-			["shopHasMovementSpeed5x"]: (boolean),
-			["shopHasTripleSummon"]: (boolean),
-			["shopHasExtraEquipTwo"]: (boolean),
-			["shopHasLuckySummon"]: (boolean),
-			["shopHasBootMagnet"]: (boolean),
-			["shopHasPetPassiveAura"]: (boolean),
-			["shopExtraPetSlotsCount"]: (number),
-			["shopPetPassiveOverclockCount"]: (number),
-			["shopBootValueCoreCount"]: (number),
-			["isSprinting"]: (boolean),
-			["sprintEndsAt"]: (number),
-			["cooldownEndsAt"]: (number),
-		}))
-			load_empty()
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, 0)
 			local bool_16 = 0
@@ -1441,16 +1127,9 @@ local returns = {
 			alloc(8)
 			buffer.writef64(outgoing_buff, outgoing_apos, Value["cooldownEndsAt"])
 			buffer.writeu8(outgoing_buff, bool_16_pos_1, bool_16)
-			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
-			for _, player in List do
-				load_player(player)
-				alloc(used)
-				buffer.copy(outgoing_buff, outgoing_apos, buff, 0, used)
-				table.move(inst, 1, #inst, #outgoing_inst + 1, outgoing_inst)
-				player_map[player] = save()
-			end
+			player_map[Player] = save()
 		end,
-		FireSet = function(Set: { [Player]: any }, Value: ({
+		FireAll = function(Value: ({
 			["footyens"]: (number),
 			["footgems"]: (number),
 			["totalDistance"]: (number),
@@ -1602,6 +1281,488 @@ local returns = {
 			buffer.writef64(outgoing_buff, outgoing_apos, Value["cooldownEndsAt"])
 			buffer.writeu8(outgoing_buff, bool_17_pos_1, bool_17)
 			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
+			for _, player in Players:GetPlayers() do
+				load_player(player)
+				alloc(used)
+				buffer.copy(outgoing_buff, outgoing_apos, buff, 0, used)
+				table.move(inst, 1, #inst, #outgoing_inst + 1, outgoing_inst)
+				player_map[player] = save()
+			end
+		end,
+		FireExcept = function(Except: Player, Value: ({
+			["footyens"]: (number),
+			["footgems"]: (number),
+			["totalDistance"]: (number),
+			["bootsCollected"]: (number),
+			["activeBoots"]: (number),
+			["movementSpeedLevel"]: (number),
+			["studsPerCurrencyLevel"]: (number),
+			["currencyMultiplierLevel"]: (number),
+			["bootValueLevel"]: (number),
+			["spawnRateLevel"]: (number),
+			["maxActiveBootsLevel"]: (number),
+			["pickupRadiusLevel"]: (number),
+			["bootLifetimeLevel"]: (number),
+			["goldenChanceLevel"]: (number),
+			["goldenMultiplierLevel"]: (number),
+			["movementSpeed"]: (number),
+			["studsPerCurrency"]: (number),
+			["currencyMultiplier"]: (number),
+			["bootValue"]: (number),
+			["bootSpawnInterval"]: (number),
+			["bootMaxActive"]: (number),
+			["bootPickupRadius"]: (number),
+			["bootLifetime"]: (number),
+			["bootGoldenChance"]: (number),
+			["bootGoldenMultiplier"]: (number),
+			["petInventoryLimit"]: (number),
+			["petEmptySlots"]: (number),
+			["petInventoryCount"]: (number),
+			["petEquipLimit"]: (number),
+			["equippedPetCount"]: (number),
+			["petFootyenMultiplier"]: (number),
+			["petPassivePerSecond"]: (number),
+			["shopHasFootyenGain10x"]: (boolean),
+			["shopHasMovementSpeed5x"]: (boolean),
+			["shopHasTripleSummon"]: (boolean),
+			["shopHasExtraEquipTwo"]: (boolean),
+			["shopHasLuckySummon"]: (boolean),
+			["shopHasBootMagnet"]: (boolean),
+			["shopHasPetPassiveAura"]: (boolean),
+			["shopExtraPetSlotsCount"]: (number),
+			["shopPetPassiveOverclockCount"]: (number),
+			["shopBootValueCoreCount"]: (number),
+			["isSprinting"]: (boolean),
+			["sprintEndsAt"]: (number),
+			["cooldownEndsAt"]: (number),
+		}))
+			load_empty()
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 0)
+			local bool_18 = 0
+			local bool_18_pos_1 = alloc(1)
+			alloc(4)
+			buffer.writeu32(outgoing_buff, outgoing_apos, Value["footyens"])
+			alloc(4)
+			buffer.writeu32(outgoing_buff, outgoing_apos, Value["footgems"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["totalDistance"])
+			alloc(4)
+			buffer.writeu32(outgoing_buff, outgoing_apos, Value["bootsCollected"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["activeBoots"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["movementSpeedLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["studsPerCurrencyLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["currencyMultiplierLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootValueLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["spawnRateLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["maxActiveBootsLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["pickupRadiusLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootLifetimeLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["goldenChanceLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["goldenMultiplierLevel"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["movementSpeed"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["studsPerCurrency"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["currencyMultiplier"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootValue"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootSpawnInterval"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootMaxActive"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootPickupRadius"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootLifetime"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootGoldenChance"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootGoldenMultiplier"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petInventoryLimit"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEmptySlots"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petInventoryCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEquipLimit"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["equippedPetCount"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["petFootyenMultiplier"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["petPassivePerSecond"])
+			if Value["shopHasFootyenGain10x"] then
+				bool_18 = bit32.bor(bool_18, 0b0000000000000001)
+			end
+			if Value["shopHasMovementSpeed5x"] then
+				bool_18 = bit32.bor(bool_18, 0b0000000000000010)
+			end
+			if Value["shopHasTripleSummon"] then
+				bool_18 = bit32.bor(bool_18, 0b0000000000000100)
+			end
+			if Value["shopHasExtraEquipTwo"] then
+				bool_18 = bit32.bor(bool_18, 0b0000000000001000)
+			end
+			if Value["shopHasLuckySummon"] then
+				bool_18 = bit32.bor(bool_18, 0b0000000000010000)
+			end
+			if Value["shopHasBootMagnet"] then
+				bool_18 = bit32.bor(bool_18, 0b0000000000100000)
+			end
+			if Value["shopHasPetPassiveAura"] then
+				bool_18 = bit32.bor(bool_18, 0b0000000001000000)
+			end
+			alloc(2)
+			buffer.writeu16(outgoing_buff, outgoing_apos, Value["shopExtraPetSlotsCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["shopPetPassiveOverclockCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["shopBootValueCoreCount"])
+			if Value["isSprinting"] then
+				bool_18 = bit32.bor(bool_18, 0b0000000010000000)
+			end
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["sprintEndsAt"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["cooldownEndsAt"])
+			buffer.writeu8(outgoing_buff, bool_18_pos_1, bool_18)
+			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
+			for _, player in Players:GetPlayers() do
+				if player ~= Except then
+					load_player(player)
+					alloc(used)
+					buffer.copy(outgoing_buff, outgoing_apos, buff, 0, used)
+					table.move(inst, 1, #inst, #outgoing_inst + 1, outgoing_inst)
+					player_map[player] = save()
+				end
+			end
+		end,
+		FireList = function(List: { [unknown]: Player }, Value: ({
+			["footyens"]: (number),
+			["footgems"]: (number),
+			["totalDistance"]: (number),
+			["bootsCollected"]: (number),
+			["activeBoots"]: (number),
+			["movementSpeedLevel"]: (number),
+			["studsPerCurrencyLevel"]: (number),
+			["currencyMultiplierLevel"]: (number),
+			["bootValueLevel"]: (number),
+			["spawnRateLevel"]: (number),
+			["maxActiveBootsLevel"]: (number),
+			["pickupRadiusLevel"]: (number),
+			["bootLifetimeLevel"]: (number),
+			["goldenChanceLevel"]: (number),
+			["goldenMultiplierLevel"]: (number),
+			["movementSpeed"]: (number),
+			["studsPerCurrency"]: (number),
+			["currencyMultiplier"]: (number),
+			["bootValue"]: (number),
+			["bootSpawnInterval"]: (number),
+			["bootMaxActive"]: (number),
+			["bootPickupRadius"]: (number),
+			["bootLifetime"]: (number),
+			["bootGoldenChance"]: (number),
+			["bootGoldenMultiplier"]: (number),
+			["petInventoryLimit"]: (number),
+			["petEmptySlots"]: (number),
+			["petInventoryCount"]: (number),
+			["petEquipLimit"]: (number),
+			["equippedPetCount"]: (number),
+			["petFootyenMultiplier"]: (number),
+			["petPassivePerSecond"]: (number),
+			["shopHasFootyenGain10x"]: (boolean),
+			["shopHasMovementSpeed5x"]: (boolean),
+			["shopHasTripleSummon"]: (boolean),
+			["shopHasExtraEquipTwo"]: (boolean),
+			["shopHasLuckySummon"]: (boolean),
+			["shopHasBootMagnet"]: (boolean),
+			["shopHasPetPassiveAura"]: (boolean),
+			["shopExtraPetSlotsCount"]: (number),
+			["shopPetPassiveOverclockCount"]: (number),
+			["shopBootValueCoreCount"]: (number),
+			["isSprinting"]: (boolean),
+			["sprintEndsAt"]: (number),
+			["cooldownEndsAt"]: (number),
+		}))
+			load_empty()
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 0)
+			local bool_19 = 0
+			local bool_19_pos_1 = alloc(1)
+			alloc(4)
+			buffer.writeu32(outgoing_buff, outgoing_apos, Value["footyens"])
+			alloc(4)
+			buffer.writeu32(outgoing_buff, outgoing_apos, Value["footgems"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["totalDistance"])
+			alloc(4)
+			buffer.writeu32(outgoing_buff, outgoing_apos, Value["bootsCollected"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["activeBoots"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["movementSpeedLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["studsPerCurrencyLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["currencyMultiplierLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootValueLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["spawnRateLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["maxActiveBootsLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["pickupRadiusLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootLifetimeLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["goldenChanceLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["goldenMultiplierLevel"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["movementSpeed"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["studsPerCurrency"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["currencyMultiplier"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootValue"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootSpawnInterval"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootMaxActive"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootPickupRadius"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootLifetime"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootGoldenChance"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootGoldenMultiplier"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petInventoryLimit"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEmptySlots"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petInventoryCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEquipLimit"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["equippedPetCount"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["petFootyenMultiplier"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["petPassivePerSecond"])
+			if Value["shopHasFootyenGain10x"] then
+				bool_19 = bit32.bor(bool_19, 0b0000000000000001)
+			end
+			if Value["shopHasMovementSpeed5x"] then
+				bool_19 = bit32.bor(bool_19, 0b0000000000000010)
+			end
+			if Value["shopHasTripleSummon"] then
+				bool_19 = bit32.bor(bool_19, 0b0000000000000100)
+			end
+			if Value["shopHasExtraEquipTwo"] then
+				bool_19 = bit32.bor(bool_19, 0b0000000000001000)
+			end
+			if Value["shopHasLuckySummon"] then
+				bool_19 = bit32.bor(bool_19, 0b0000000000010000)
+			end
+			if Value["shopHasBootMagnet"] then
+				bool_19 = bit32.bor(bool_19, 0b0000000000100000)
+			end
+			if Value["shopHasPetPassiveAura"] then
+				bool_19 = bit32.bor(bool_19, 0b0000000001000000)
+			end
+			alloc(2)
+			buffer.writeu16(outgoing_buff, outgoing_apos, Value["shopExtraPetSlotsCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["shopPetPassiveOverclockCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["shopBootValueCoreCount"])
+			if Value["isSprinting"] then
+				bool_19 = bit32.bor(bool_19, 0b0000000010000000)
+			end
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["sprintEndsAt"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["cooldownEndsAt"])
+			buffer.writeu8(outgoing_buff, bool_19_pos_1, bool_19)
+			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
+			for _, player in List do
+				load_player(player)
+				alloc(used)
+				buffer.copy(outgoing_buff, outgoing_apos, buff, 0, used)
+				table.move(inst, 1, #inst, #outgoing_inst + 1, outgoing_inst)
+				player_map[player] = save()
+			end
+		end,
+		FireSet = function(Set: { [Player]: any }, Value: ({
+			["footyens"]: (number),
+			["footgems"]: (number),
+			["totalDistance"]: (number),
+			["bootsCollected"]: (number),
+			["activeBoots"]: (number),
+			["movementSpeedLevel"]: (number),
+			["studsPerCurrencyLevel"]: (number),
+			["currencyMultiplierLevel"]: (number),
+			["bootValueLevel"]: (number),
+			["spawnRateLevel"]: (number),
+			["maxActiveBootsLevel"]: (number),
+			["pickupRadiusLevel"]: (number),
+			["bootLifetimeLevel"]: (number),
+			["goldenChanceLevel"]: (number),
+			["goldenMultiplierLevel"]: (number),
+			["movementSpeed"]: (number),
+			["studsPerCurrency"]: (number),
+			["currencyMultiplier"]: (number),
+			["bootValue"]: (number),
+			["bootSpawnInterval"]: (number),
+			["bootMaxActive"]: (number),
+			["bootPickupRadius"]: (number),
+			["bootLifetime"]: (number),
+			["bootGoldenChance"]: (number),
+			["bootGoldenMultiplier"]: (number),
+			["petInventoryLimit"]: (number),
+			["petEmptySlots"]: (number),
+			["petInventoryCount"]: (number),
+			["petEquipLimit"]: (number),
+			["equippedPetCount"]: (number),
+			["petFootyenMultiplier"]: (number),
+			["petPassivePerSecond"]: (number),
+			["shopHasFootyenGain10x"]: (boolean),
+			["shopHasMovementSpeed5x"]: (boolean),
+			["shopHasTripleSummon"]: (boolean),
+			["shopHasExtraEquipTwo"]: (boolean),
+			["shopHasLuckySummon"]: (boolean),
+			["shopHasBootMagnet"]: (boolean),
+			["shopHasPetPassiveAura"]: (boolean),
+			["shopExtraPetSlotsCount"]: (number),
+			["shopPetPassiveOverclockCount"]: (number),
+			["shopBootValueCoreCount"]: (number),
+			["isSprinting"]: (boolean),
+			["sprintEndsAt"]: (number),
+			["cooldownEndsAt"]: (number),
+		}))
+			load_empty()
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 0)
+			local bool_20 = 0
+			local bool_20_pos_1 = alloc(1)
+			alloc(4)
+			buffer.writeu32(outgoing_buff, outgoing_apos, Value["footyens"])
+			alloc(4)
+			buffer.writeu32(outgoing_buff, outgoing_apos, Value["footgems"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["totalDistance"])
+			alloc(4)
+			buffer.writeu32(outgoing_buff, outgoing_apos, Value["bootsCollected"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["activeBoots"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["movementSpeedLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["studsPerCurrencyLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["currencyMultiplierLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootValueLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["spawnRateLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["maxActiveBootsLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["pickupRadiusLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootLifetimeLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["goldenChanceLevel"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["goldenMultiplierLevel"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["movementSpeed"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["studsPerCurrency"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["currencyMultiplier"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootValue"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootSpawnInterval"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["bootMaxActive"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootPickupRadius"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootLifetime"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootGoldenChance"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["bootGoldenMultiplier"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petInventoryLimit"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEmptySlots"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petInventoryCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEquipLimit"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["equippedPetCount"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["petFootyenMultiplier"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["petPassivePerSecond"])
+			if Value["shopHasFootyenGain10x"] then
+				bool_20 = bit32.bor(bool_20, 0b0000000000000001)
+			end
+			if Value["shopHasMovementSpeed5x"] then
+				bool_20 = bit32.bor(bool_20, 0b0000000000000010)
+			end
+			if Value["shopHasTripleSummon"] then
+				bool_20 = bit32.bor(bool_20, 0b0000000000000100)
+			end
+			if Value["shopHasExtraEquipTwo"] then
+				bool_20 = bit32.bor(bool_20, 0b0000000000001000)
+			end
+			if Value["shopHasLuckySummon"] then
+				bool_20 = bit32.bor(bool_20, 0b0000000000010000)
+			end
+			if Value["shopHasBootMagnet"] then
+				bool_20 = bit32.bor(bool_20, 0b0000000000100000)
+			end
+			if Value["shopHasPetPassiveAura"] then
+				bool_20 = bit32.bor(bool_20, 0b0000000001000000)
+			end
+			alloc(2)
+			buffer.writeu16(outgoing_buff, outgoing_apos, Value["shopExtraPetSlotsCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["shopPetPassiveOverclockCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["shopBootValueCoreCount"])
+			if Value["isSprinting"] then
+				bool_20 = bit32.bor(bool_20, 0b0000000010000000)
+			end
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["sprintEndsAt"])
+			alloc(8)
+			buffer.writef64(outgoing_buff, outgoing_apos, Value["cooldownEndsAt"])
+			buffer.writeu8(outgoing_buff, bool_20_pos_1, bool_20)
+			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
 			for player in Set do
 				load_player(player)
 				alloc(used)
@@ -1638,36 +1799,36 @@ local returns = {
 			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEquipLimit"])
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, Value["equippedPetCount"])
-			local len_26 = #Value["pets"]
-			assert(len_26 <= 45, "value is more than 45!")
+			local len_35 = #Value["pets"]
+			assert(len_35 <= 45, "value is more than 45!")
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, len_26)
-			for i_5 = 1, len_26 do
-				local bool_18 = 0
-				local bool_18_pos_1 = alloc(1)
-				local val_5 = Value["pets"][i_5]
-				local len_27 = #val_5["uid"]
-				assert(len_27 <= 192, "value is more than 192!")
-				assert(utf8.len(val_5["uid"]) ~= nil, "value is not valid utf-8")
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_35)
+			for i_6 = 1, len_35 do
+				local bool_21 = 0
+				local bool_21_pos_1 = alloc(1)
+				local val_6 = Value["pets"][i_6]
+				local len_36 = #val_6["uid"]
+				assert(len_36 <= 192, "value is more than 192!")
+				assert(utf8.len(val_6["uid"]) ~= nil, "value is not valid utf-8")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, len_27)
-				alloc(len_27)
-				buffer.writestring(outgoing_buff, outgoing_apos, val_5["uid"], len_27)
-				local len_28 = #val_5["petId"]
-				assert(len_28 <= 128, "value is more than 128!")
-				assert(utf8.len(val_5["petId"]) ~= nil, "value is not valid utf-8")
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_36)
+				alloc(len_36)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_6["uid"], len_36)
+				local len_37 = #val_6["petId"]
+				assert(len_37 <= 128, "value is more than 128!")
+				assert(utf8.len(val_6["petId"]) ~= nil, "value is not valid utf-8")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, len_28)
-				alloc(len_28)
-				buffer.writestring(outgoing_buff, outgoing_apos, val_5["petId"], len_28)
-				assert(val_5["level"] >= 1, "value is less than 1!")
-				assert(val_5["level"] <= 5, "value is more than 5!")
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_37)
+				alloc(len_37)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_6["petId"], len_37)
+				assert(val_6["level"] >= 1, "value is less than 1!")
+				assert(val_6["level"] <= 5, "value is more than 5!")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, val_5["level"])
-				if val_5["isEquipped"] then
-					bool_18 = bit32.bor(bool_18, 0b0000000000000001)
+				buffer.writeu8(outgoing_buff, outgoing_apos, val_6["level"])
+				if val_6["isEquipped"] then
+					bool_21 = bit32.bor(bool_21, 0b0000000000000001)
 				end
-				buffer.writeu8(outgoing_buff, bool_18_pos_1, bool_18)
+				buffer.writeu8(outgoing_buff, bool_21_pos_1, bool_21)
 			end
 			player_map[Player] = save()
 		end,
@@ -1697,36 +1858,36 @@ local returns = {
 			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEquipLimit"])
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, Value["equippedPetCount"])
-			local len_29 = #Value["pets"]
-			assert(len_29 <= 45, "value is more than 45!")
+			local len_38 = #Value["pets"]
+			assert(len_38 <= 45, "value is more than 45!")
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, len_29)
-			for i_6 = 1, len_29 do
-				local bool_19 = 0
-				local bool_19_pos_1 = alloc(1)
-				local val_6 = Value["pets"][i_6]
-				local len_30 = #val_6["uid"]
-				assert(len_30 <= 192, "value is more than 192!")
-				assert(utf8.len(val_6["uid"]) ~= nil, "value is not valid utf-8")
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_38)
+			for i_7 = 1, len_38 do
+				local bool_22 = 0
+				local bool_22_pos_1 = alloc(1)
+				local val_7 = Value["pets"][i_7]
+				local len_39 = #val_7["uid"]
+				assert(len_39 <= 192, "value is more than 192!")
+				assert(utf8.len(val_7["uid"]) ~= nil, "value is not valid utf-8")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, len_30)
-				alloc(len_30)
-				buffer.writestring(outgoing_buff, outgoing_apos, val_6["uid"], len_30)
-				local len_31 = #val_6["petId"]
-				assert(len_31 <= 128, "value is more than 128!")
-				assert(utf8.len(val_6["petId"]) ~= nil, "value is not valid utf-8")
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_39)
+				alloc(len_39)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_7["uid"], len_39)
+				local len_40 = #val_7["petId"]
+				assert(len_40 <= 128, "value is more than 128!")
+				assert(utf8.len(val_7["petId"]) ~= nil, "value is not valid utf-8")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, len_31)
-				alloc(len_31)
-				buffer.writestring(outgoing_buff, outgoing_apos, val_6["petId"], len_31)
-				assert(val_6["level"] >= 1, "value is less than 1!")
-				assert(val_6["level"] <= 5, "value is more than 5!")
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_40)
+				alloc(len_40)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_7["petId"], len_40)
+				assert(val_7["level"] >= 1, "value is less than 1!")
+				assert(val_7["level"] <= 5, "value is more than 5!")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, val_6["level"])
-				if val_6["isEquipped"] then
-					bool_19 = bit32.bor(bool_19, 0b0000000000000001)
+				buffer.writeu8(outgoing_buff, outgoing_apos, val_7["level"])
+				if val_7["isEquipped"] then
+					bool_22 = bit32.bor(bool_22, 0b0000000000000001)
 				end
-				buffer.writeu8(outgoing_buff, bool_19_pos_1, bool_19)
+				buffer.writeu8(outgoing_buff, bool_22_pos_1, bool_22)
 			end
 			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
 			for _, player in Players:GetPlayers() do
@@ -1763,36 +1924,36 @@ local returns = {
 			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEquipLimit"])
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, Value["equippedPetCount"])
-			local len_32 = #Value["pets"]
-			assert(len_32 <= 45, "value is more than 45!")
+			local len_41 = #Value["pets"]
+			assert(len_41 <= 45, "value is more than 45!")
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, len_32)
-			for i_7 = 1, len_32 do
-				local bool_20 = 0
-				local bool_20_pos_1 = alloc(1)
-				local val_7 = Value["pets"][i_7]
-				local len_33 = #val_7["uid"]
-				assert(len_33 <= 192, "value is more than 192!")
-				assert(utf8.len(val_7["uid"]) ~= nil, "value is not valid utf-8")
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_41)
+			for i_8 = 1, len_41 do
+				local bool_23 = 0
+				local bool_23_pos_1 = alloc(1)
+				local val_8 = Value["pets"][i_8]
+				local len_42 = #val_8["uid"]
+				assert(len_42 <= 192, "value is more than 192!")
+				assert(utf8.len(val_8["uid"]) ~= nil, "value is not valid utf-8")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, len_33)
-				alloc(len_33)
-				buffer.writestring(outgoing_buff, outgoing_apos, val_7["uid"], len_33)
-				local len_34 = #val_7["petId"]
-				assert(len_34 <= 128, "value is more than 128!")
-				assert(utf8.len(val_7["petId"]) ~= nil, "value is not valid utf-8")
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_42)
+				alloc(len_42)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_8["uid"], len_42)
+				local len_43 = #val_8["petId"]
+				assert(len_43 <= 128, "value is more than 128!")
+				assert(utf8.len(val_8["petId"]) ~= nil, "value is not valid utf-8")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, len_34)
-				alloc(len_34)
-				buffer.writestring(outgoing_buff, outgoing_apos, val_7["petId"], len_34)
-				assert(val_7["level"] >= 1, "value is less than 1!")
-				assert(val_7["level"] <= 5, "value is more than 5!")
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_43)
+				alloc(len_43)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_8["petId"], len_43)
+				assert(val_8["level"] >= 1, "value is less than 1!")
+				assert(val_8["level"] <= 5, "value is more than 5!")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, val_7["level"])
-				if val_7["isEquipped"] then
-					bool_20 = bit32.bor(bool_20, 0b0000000000000001)
+				buffer.writeu8(outgoing_buff, outgoing_apos, val_8["level"])
+				if val_8["isEquipped"] then
+					bool_23 = bit32.bor(bool_23, 0b0000000000000001)
 				end
-				buffer.writeu8(outgoing_buff, bool_20_pos_1, bool_20)
+				buffer.writeu8(outgoing_buff, bool_23_pos_1, bool_23)
 			end
 			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
 			for _, player in Players:GetPlayers() do
@@ -1831,36 +1992,36 @@ local returns = {
 			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEquipLimit"])
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, Value["equippedPetCount"])
-			local len_35 = #Value["pets"]
-			assert(len_35 <= 45, "value is more than 45!")
+			local len_44 = #Value["pets"]
+			assert(len_44 <= 45, "value is more than 45!")
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, len_35)
-			for i_8 = 1, len_35 do
-				local bool_21 = 0
-				local bool_21_pos_1 = alloc(1)
-				local val_8 = Value["pets"][i_8]
-				local len_36 = #val_8["uid"]
-				assert(len_36 <= 192, "value is more than 192!")
-				assert(utf8.len(val_8["uid"]) ~= nil, "value is not valid utf-8")
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_44)
+			for i_9 = 1, len_44 do
+				local bool_24 = 0
+				local bool_24_pos_1 = alloc(1)
+				local val_9 = Value["pets"][i_9]
+				local len_45 = #val_9["uid"]
+				assert(len_45 <= 192, "value is more than 192!")
+				assert(utf8.len(val_9["uid"]) ~= nil, "value is not valid utf-8")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, len_36)
-				alloc(len_36)
-				buffer.writestring(outgoing_buff, outgoing_apos, val_8["uid"], len_36)
-				local len_37 = #val_8["petId"]
-				assert(len_37 <= 128, "value is more than 128!")
-				assert(utf8.len(val_8["petId"]) ~= nil, "value is not valid utf-8")
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_45)
+				alloc(len_45)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_9["uid"], len_45)
+				local len_46 = #val_9["petId"]
+				assert(len_46 <= 128, "value is more than 128!")
+				assert(utf8.len(val_9["petId"]) ~= nil, "value is not valid utf-8")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, len_37)
-				alloc(len_37)
-				buffer.writestring(outgoing_buff, outgoing_apos, val_8["petId"], len_37)
-				assert(val_8["level"] >= 1, "value is less than 1!")
-				assert(val_8["level"] <= 5, "value is more than 5!")
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_46)
+				alloc(len_46)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_9["petId"], len_46)
+				assert(val_9["level"] >= 1, "value is less than 1!")
+				assert(val_9["level"] <= 5, "value is more than 5!")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, val_8["level"])
-				if val_8["isEquipped"] then
-					bool_21 = bit32.bor(bool_21, 0b0000000000000001)
+				buffer.writeu8(outgoing_buff, outgoing_apos, val_9["level"])
+				if val_9["isEquipped"] then
+					bool_24 = bit32.bor(bool_24, 0b0000000000000001)
 				end
-				buffer.writeu8(outgoing_buff, bool_21_pos_1, bool_21)
+				buffer.writeu8(outgoing_buff, bool_24_pos_1, bool_24)
 			end
 			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
 			for _, player in List do
@@ -1897,37 +2058,184 @@ local returns = {
 			buffer.writeu8(outgoing_buff, outgoing_apos, Value["petEquipLimit"])
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, Value["equippedPetCount"])
-			local len_38 = #Value["pets"]
-			assert(len_38 <= 45, "value is more than 45!")
+			local len_47 = #Value["pets"]
+			assert(len_47 <= 45, "value is more than 45!")
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, len_38)
-			for i_9 = 1, len_38 do
-				local bool_22 = 0
-				local bool_22_pos_1 = alloc(1)
-				local val_9 = Value["pets"][i_9]
-				local len_39 = #val_9["uid"]
-				assert(len_39 <= 192, "value is more than 192!")
-				assert(utf8.len(val_9["uid"]) ~= nil, "value is not valid utf-8")
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_47)
+			for i_10 = 1, len_47 do
+				local bool_25 = 0
+				local bool_25_pos_1 = alloc(1)
+				local val_10 = Value["pets"][i_10]
+				local len_48 = #val_10["uid"]
+				assert(len_48 <= 192, "value is more than 192!")
+				assert(utf8.len(val_10["uid"]) ~= nil, "value is not valid utf-8")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, len_39)
-				alloc(len_39)
-				buffer.writestring(outgoing_buff, outgoing_apos, val_9["uid"], len_39)
-				local len_40 = #val_9["petId"]
-				assert(len_40 <= 128, "value is more than 128!")
-				assert(utf8.len(val_9["petId"]) ~= nil, "value is not valid utf-8")
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_48)
+				alloc(len_48)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_10["uid"], len_48)
+				local len_49 = #val_10["petId"]
+				assert(len_49 <= 128, "value is more than 128!")
+				assert(utf8.len(val_10["petId"]) ~= nil, "value is not valid utf-8")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, len_40)
-				alloc(len_40)
-				buffer.writestring(outgoing_buff, outgoing_apos, val_9["petId"], len_40)
-				assert(val_9["level"] >= 1, "value is less than 1!")
-				assert(val_9["level"] <= 5, "value is more than 5!")
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_49)
+				alloc(len_49)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_10["petId"], len_49)
+				assert(val_10["level"] >= 1, "value is less than 1!")
+				assert(val_10["level"] <= 5, "value is more than 5!")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, val_9["level"])
-				if val_9["isEquipped"] then
-					bool_22 = bit32.bor(bool_22, 0b0000000000000001)
+				buffer.writeu8(outgoing_buff, outgoing_apos, val_10["level"])
+				if val_10["isEquipped"] then
+					bool_25 = bit32.bor(bool_25, 0b0000000000000001)
 				end
-				buffer.writeu8(outgoing_buff, bool_22_pos_1, bool_22)
+				buffer.writeu8(outgoing_buff, bool_25_pos_1, bool_25)
 			end
+			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
+			for player in Set do
+				load_player(player)
+				alloc(used)
+				buffer.copy(outgoing_buff, outgoing_apos, buff, 0, used)
+				table.move(inst, 1, #inst, #outgoing_inst + 1, outgoing_inst)
+				player_map[player] = save()
+			end
+		end,
+	},
+	LiveConfigSnapshot = {
+		Fire = function(Player: Player, Value: ({
+			["key"]: (string),
+			["payloadJson"]: (string),
+		}))
+			load_player(Player)
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 3)
+			local len_50 = #Value["key"]
+			assert(len_50 <= 256, "value is more than 256!")
+			assert(utf8.len(Value["key"]) ~= nil, "value is not valid utf-8")
+			alloc(2)
+			buffer.writeu16(outgoing_buff, outgoing_apos, len_50)
+			alloc(len_50)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value["key"], len_50)
+			local len_51 = #Value["payloadJson"]
+			assert(len_51 <= 262140, "value is more than 262140!")
+			assert(utf8.len(Value["payloadJson"]) ~= nil, "value is not valid utf-8")
+			alloc(4)
+			buffer.writeu32(outgoing_buff, outgoing_apos, len_51)
+			alloc(len_51)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value["payloadJson"], len_51)
+			player_map[Player] = save()
+		end,
+		FireAll = function(Value: ({
+			["key"]: (string),
+			["payloadJson"]: (string),
+		}))
+			load_empty()
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 3)
+			local len_52 = #Value["key"]
+			assert(len_52 <= 256, "value is more than 256!")
+			assert(utf8.len(Value["key"]) ~= nil, "value is not valid utf-8")
+			alloc(2)
+			buffer.writeu16(outgoing_buff, outgoing_apos, len_52)
+			alloc(len_52)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value["key"], len_52)
+			local len_53 = #Value["payloadJson"]
+			assert(len_53 <= 262140, "value is more than 262140!")
+			assert(utf8.len(Value["payloadJson"]) ~= nil, "value is not valid utf-8")
+			alloc(4)
+			buffer.writeu32(outgoing_buff, outgoing_apos, len_53)
+			alloc(len_53)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value["payloadJson"], len_53)
+			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
+			for _, player in Players:GetPlayers() do
+				load_player(player)
+				alloc(used)
+				buffer.copy(outgoing_buff, outgoing_apos, buff, 0, used)
+				table.move(inst, 1, #inst, #outgoing_inst + 1, outgoing_inst)
+				player_map[player] = save()
+			end
+		end,
+		FireExcept = function(Except: Player, Value: ({
+			["key"]: (string),
+			["payloadJson"]: (string),
+		}))
+			load_empty()
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 3)
+			local len_54 = #Value["key"]
+			assert(len_54 <= 256, "value is more than 256!")
+			assert(utf8.len(Value["key"]) ~= nil, "value is not valid utf-8")
+			alloc(2)
+			buffer.writeu16(outgoing_buff, outgoing_apos, len_54)
+			alloc(len_54)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value["key"], len_54)
+			local len_55 = #Value["payloadJson"]
+			assert(len_55 <= 262140, "value is more than 262140!")
+			assert(utf8.len(Value["payloadJson"]) ~= nil, "value is not valid utf-8")
+			alloc(4)
+			buffer.writeu32(outgoing_buff, outgoing_apos, len_55)
+			alloc(len_55)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value["payloadJson"], len_55)
+			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
+			for _, player in Players:GetPlayers() do
+				if player ~= Except then
+					load_player(player)
+					alloc(used)
+					buffer.copy(outgoing_buff, outgoing_apos, buff, 0, used)
+					table.move(inst, 1, #inst, #outgoing_inst + 1, outgoing_inst)
+					player_map[player] = save()
+				end
+			end
+		end,
+		FireList = function(List: { [unknown]: Player }, Value: ({
+			["key"]: (string),
+			["payloadJson"]: (string),
+		}))
+			load_empty()
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 3)
+			local len_56 = #Value["key"]
+			assert(len_56 <= 256, "value is more than 256!")
+			assert(utf8.len(Value["key"]) ~= nil, "value is not valid utf-8")
+			alloc(2)
+			buffer.writeu16(outgoing_buff, outgoing_apos, len_56)
+			alloc(len_56)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value["key"], len_56)
+			local len_57 = #Value["payloadJson"]
+			assert(len_57 <= 262140, "value is more than 262140!")
+			assert(utf8.len(Value["payloadJson"]) ~= nil, "value is not valid utf-8")
+			alloc(4)
+			buffer.writeu32(outgoing_buff, outgoing_apos, len_57)
+			alloc(len_57)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value["payloadJson"], len_57)
+			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
+			for _, player in List do
+				load_player(player)
+				alloc(used)
+				buffer.copy(outgoing_buff, outgoing_apos, buff, 0, used)
+				table.move(inst, 1, #inst, #outgoing_inst + 1, outgoing_inst)
+				player_map[player] = save()
+			end
+		end,
+		FireSet = function(Set: { [Player]: any }, Value: ({
+			["key"]: (string),
+			["payloadJson"]: (string),
+		}))
+			load_empty()
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 3)
+			local len_58 = #Value["key"]
+			assert(len_58 <= 256, "value is more than 256!")
+			assert(utf8.len(Value["key"]) ~= nil, "value is not valid utf-8")
+			alloc(2)
+			buffer.writeu16(outgoing_buff, outgoing_apos, len_58)
+			alloc(len_58)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value["key"], len_58)
+			local len_59 = #Value["payloadJson"]
+			assert(len_59 <= 262140, "value is more than 262140!")
+			assert(utf8.len(Value["payloadJson"]) ~= nil, "value is not valid utf-8")
+			alloc(4)
+			buffer.writeu32(outgoing_buff, outgoing_apos, len_59)
+			alloc(len_59)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value["payloadJson"], len_59)
 			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
 			for player in Set do
 				load_player(player)
@@ -2012,8 +2320,54 @@ local returns = {
 			end
 		end,
 	},
+	GetLiveConfigSnapshot = {
+		SetCallback = function(Callback: (Player: Player, Value: (string)) -> (({
+			["found"]: (boolean),
+			["payloadJson"]: (string),
+		}))): () -> ()
+			reliable_events[4] = Callback
+			return function()
+				reliable_events[4] = nil
+			end
+		end,
+	},
+	GetAchievements = {
+		SetCallback = function(Callback: (Player: Player) -> (({
+			["achievementCount"]: (number),
+			["completedAchievementCount"]: (number),
+			["claimedAchievementCount"]: (number),
+			["achievements"]: ({ ({
+				["id"]: (string),
+				["displayName"]: (string),
+				["description"]: (string),
+				["type"]: (string),
+				["progress"]: (number),
+				["target"]: (number),
+				["isComplete"]: (boolean),
+				["isClaimed"]: (boolean),
+				["rewardFootgems"]: (number),
+				["rewardFootcores"]: (number),
+			}) }),
+		}))): () -> ()
+			reliable_events[3] = Callback
+			return function()
+				reliable_events[3] = nil
+			end
+		end,
+	},
 	EquipBestPets = {
 		SetCallback = function(Callback: (Player: Player) -> (({
+			["success"]: (boolean),
+			["message"]: (string),
+		}))): () -> ()
+			reliable_events[12] = Callback
+			return function()
+				reliable_events[12] = nil
+			end
+		end,
+	},
+	DeletePets = {
+		SetCallback = function(Callback: (Player: Player, Value: ({ (string) })) -> (({
 			["success"]: (boolean),
 			["message"]: (string),
 		}))): () -> ()
@@ -2023,25 +2377,459 @@ local returns = {
 			end
 		end,
 	},
-	DeletePets = {
-		SetCallback = function(Callback: (Player: Player, Value: ({ (string) })) -> (({
-			["success"]: (boolean),
-			["message"]: (string),
-		}))): () -> ()
-			reliable_events[8] = Callback
-			return function()
-				reliable_events[8] = nil
-			end
-		end,
-	},
 	DeletePet = {
 		SetCallback = function(Callback: (Player: Player, Value: (string)) -> (({
 			["success"]: (boolean),
 			["message"]: (string),
 		}))): () -> ()
-			reliable_events[7] = Callback
+			reliable_events[9] = Callback
 			return function()
-				reliable_events[7] = nil
+				reliable_events[9] = nil
+			end
+		end,
+	},
+	ClaimAchievement = {
+		SetCallback = function(Callback: (Player: Player, Value: (string)) -> (({
+			["success"]: (boolean),
+			["message"]: (string),
+			["awardedFootgems"]: (number),
+			["awardedFootcores"]: (number),
+		}))): () -> ()
+			reliable_events[13] = Callback
+			return function()
+				reliable_events[13] = nil
+			end
+		end,
+	},
+	AchievementSnapshot = {
+		Fire = function(Player: Player, Value: ({
+			["achievementCount"]: (number),
+			["completedAchievementCount"]: (number),
+			["claimedAchievementCount"]: (number),
+			["achievements"]: ({ ({
+				["id"]: (string),
+				["displayName"]: (string),
+				["description"]: (string),
+				["type"]: (string),
+				["progress"]: (number),
+				["target"]: (number),
+				["isComplete"]: (boolean),
+				["isClaimed"]: (boolean),
+				["rewardFootgems"]: (number),
+				["rewardFootcores"]: (number),
+			}) }),
+		}))
+			load_player(Player)
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 2)
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["achievementCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["completedAchievementCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["claimedAchievementCount"])
+			local len_60 = #Value["achievements"]
+			assert(len_60 <= 32, "value is more than 32!")
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_60)
+			for i_11 = 1, len_60 do
+				local bool_26 = 0
+				local bool_26_pos_1 = alloc(1)
+				local val_11 = Value["achievements"][i_11]
+				local len_61 = #val_11["id"]
+				assert(len_61 <= 128, "value is more than 128!")
+				assert(utf8.len(val_11["id"]) ~= nil, "value is not valid utf-8")
+				alloc(1)
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_61)
+				alloc(len_61)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_11["id"], len_61)
+				local len_62 = #val_11["displayName"]
+				assert(len_62 <= 256, "value is more than 256!")
+				assert(utf8.len(val_11["displayName"]) ~= nil, "value is not valid utf-8")
+				alloc(2)
+				buffer.writeu16(outgoing_buff, outgoing_apos, len_62)
+				alloc(len_62)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_11["displayName"], len_62)
+				local len_63 = #val_11["description"]
+				assert(len_63 <= 640, "value is more than 640!")
+				assert(utf8.len(val_11["description"]) ~= nil, "value is not valid utf-8")
+				alloc(2)
+				buffer.writeu16(outgoing_buff, outgoing_apos, len_63)
+				alloc(len_63)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_11["description"], len_63)
+				local len_64 = #val_11["type"]
+				assert(len_64 <= 128, "value is more than 128!")
+				assert(utf8.len(val_11["type"]) ~= nil, "value is not valid utf-8")
+				alloc(1)
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_64)
+				alloc(len_64)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_11["type"], len_64)
+				alloc(8)
+				buffer.writef64(outgoing_buff, outgoing_apos, val_11["progress"])
+				alloc(8)
+				buffer.writef64(outgoing_buff, outgoing_apos, val_11["target"])
+				if val_11["isComplete"] then
+					bool_26 = bit32.bor(bool_26, 0b0000000000000001)
+				end
+				if val_11["isClaimed"] then
+					bool_26 = bit32.bor(bool_26, 0b0000000000000010)
+				end
+				alloc(4)
+				buffer.writeu32(outgoing_buff, outgoing_apos, val_11["rewardFootgems"])
+				alloc(4)
+				buffer.writeu32(outgoing_buff, outgoing_apos, val_11["rewardFootcores"])
+				buffer.writeu8(outgoing_buff, bool_26_pos_1, bool_26)
+			end
+			player_map[Player] = save()
+		end,
+		FireAll = function(Value: ({
+			["achievementCount"]: (number),
+			["completedAchievementCount"]: (number),
+			["claimedAchievementCount"]: (number),
+			["achievements"]: ({ ({
+				["id"]: (string),
+				["displayName"]: (string),
+				["description"]: (string),
+				["type"]: (string),
+				["progress"]: (number),
+				["target"]: (number),
+				["isComplete"]: (boolean),
+				["isClaimed"]: (boolean),
+				["rewardFootgems"]: (number),
+				["rewardFootcores"]: (number),
+			}) }),
+		}))
+			load_empty()
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 2)
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["achievementCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["completedAchievementCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["claimedAchievementCount"])
+			local len_65 = #Value["achievements"]
+			assert(len_65 <= 32, "value is more than 32!")
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_65)
+			for i_12 = 1, len_65 do
+				local bool_27 = 0
+				local bool_27_pos_1 = alloc(1)
+				local val_12 = Value["achievements"][i_12]
+				local len_66 = #val_12["id"]
+				assert(len_66 <= 128, "value is more than 128!")
+				assert(utf8.len(val_12["id"]) ~= nil, "value is not valid utf-8")
+				alloc(1)
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_66)
+				alloc(len_66)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_12["id"], len_66)
+				local len_67 = #val_12["displayName"]
+				assert(len_67 <= 256, "value is more than 256!")
+				assert(utf8.len(val_12["displayName"]) ~= nil, "value is not valid utf-8")
+				alloc(2)
+				buffer.writeu16(outgoing_buff, outgoing_apos, len_67)
+				alloc(len_67)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_12["displayName"], len_67)
+				local len_68 = #val_12["description"]
+				assert(len_68 <= 640, "value is more than 640!")
+				assert(utf8.len(val_12["description"]) ~= nil, "value is not valid utf-8")
+				alloc(2)
+				buffer.writeu16(outgoing_buff, outgoing_apos, len_68)
+				alloc(len_68)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_12["description"], len_68)
+				local len_69 = #val_12["type"]
+				assert(len_69 <= 128, "value is more than 128!")
+				assert(utf8.len(val_12["type"]) ~= nil, "value is not valid utf-8")
+				alloc(1)
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_69)
+				alloc(len_69)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_12["type"], len_69)
+				alloc(8)
+				buffer.writef64(outgoing_buff, outgoing_apos, val_12["progress"])
+				alloc(8)
+				buffer.writef64(outgoing_buff, outgoing_apos, val_12["target"])
+				if val_12["isComplete"] then
+					bool_27 = bit32.bor(bool_27, 0b0000000000000001)
+				end
+				if val_12["isClaimed"] then
+					bool_27 = bit32.bor(bool_27, 0b0000000000000010)
+				end
+				alloc(4)
+				buffer.writeu32(outgoing_buff, outgoing_apos, val_12["rewardFootgems"])
+				alloc(4)
+				buffer.writeu32(outgoing_buff, outgoing_apos, val_12["rewardFootcores"])
+				buffer.writeu8(outgoing_buff, bool_27_pos_1, bool_27)
+			end
+			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
+			for _, player in Players:GetPlayers() do
+				load_player(player)
+				alloc(used)
+				buffer.copy(outgoing_buff, outgoing_apos, buff, 0, used)
+				table.move(inst, 1, #inst, #outgoing_inst + 1, outgoing_inst)
+				player_map[player] = save()
+			end
+		end,
+		FireExcept = function(Except: Player, Value: ({
+			["achievementCount"]: (number),
+			["completedAchievementCount"]: (number),
+			["claimedAchievementCount"]: (number),
+			["achievements"]: ({ ({
+				["id"]: (string),
+				["displayName"]: (string),
+				["description"]: (string),
+				["type"]: (string),
+				["progress"]: (number),
+				["target"]: (number),
+				["isComplete"]: (boolean),
+				["isClaimed"]: (boolean),
+				["rewardFootgems"]: (number),
+				["rewardFootcores"]: (number),
+			}) }),
+		}))
+			load_empty()
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 2)
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["achievementCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["completedAchievementCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["claimedAchievementCount"])
+			local len_70 = #Value["achievements"]
+			assert(len_70 <= 32, "value is more than 32!")
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_70)
+			for i_13 = 1, len_70 do
+				local bool_28 = 0
+				local bool_28_pos_1 = alloc(1)
+				local val_13 = Value["achievements"][i_13]
+				local len_71 = #val_13["id"]
+				assert(len_71 <= 128, "value is more than 128!")
+				assert(utf8.len(val_13["id"]) ~= nil, "value is not valid utf-8")
+				alloc(1)
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_71)
+				alloc(len_71)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_13["id"], len_71)
+				local len_72 = #val_13["displayName"]
+				assert(len_72 <= 256, "value is more than 256!")
+				assert(utf8.len(val_13["displayName"]) ~= nil, "value is not valid utf-8")
+				alloc(2)
+				buffer.writeu16(outgoing_buff, outgoing_apos, len_72)
+				alloc(len_72)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_13["displayName"], len_72)
+				local len_73 = #val_13["description"]
+				assert(len_73 <= 640, "value is more than 640!")
+				assert(utf8.len(val_13["description"]) ~= nil, "value is not valid utf-8")
+				alloc(2)
+				buffer.writeu16(outgoing_buff, outgoing_apos, len_73)
+				alloc(len_73)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_13["description"], len_73)
+				local len_74 = #val_13["type"]
+				assert(len_74 <= 128, "value is more than 128!")
+				assert(utf8.len(val_13["type"]) ~= nil, "value is not valid utf-8")
+				alloc(1)
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_74)
+				alloc(len_74)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_13["type"], len_74)
+				alloc(8)
+				buffer.writef64(outgoing_buff, outgoing_apos, val_13["progress"])
+				alloc(8)
+				buffer.writef64(outgoing_buff, outgoing_apos, val_13["target"])
+				if val_13["isComplete"] then
+					bool_28 = bit32.bor(bool_28, 0b0000000000000001)
+				end
+				if val_13["isClaimed"] then
+					bool_28 = bit32.bor(bool_28, 0b0000000000000010)
+				end
+				alloc(4)
+				buffer.writeu32(outgoing_buff, outgoing_apos, val_13["rewardFootgems"])
+				alloc(4)
+				buffer.writeu32(outgoing_buff, outgoing_apos, val_13["rewardFootcores"])
+				buffer.writeu8(outgoing_buff, bool_28_pos_1, bool_28)
+			end
+			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
+			for _, player in Players:GetPlayers() do
+				if player ~= Except then
+					load_player(player)
+					alloc(used)
+					buffer.copy(outgoing_buff, outgoing_apos, buff, 0, used)
+					table.move(inst, 1, #inst, #outgoing_inst + 1, outgoing_inst)
+					player_map[player] = save()
+				end
+			end
+		end,
+		FireList = function(List: { [unknown]: Player }, Value: ({
+			["achievementCount"]: (number),
+			["completedAchievementCount"]: (number),
+			["claimedAchievementCount"]: (number),
+			["achievements"]: ({ ({
+				["id"]: (string),
+				["displayName"]: (string),
+				["description"]: (string),
+				["type"]: (string),
+				["progress"]: (number),
+				["target"]: (number),
+				["isComplete"]: (boolean),
+				["isClaimed"]: (boolean),
+				["rewardFootgems"]: (number),
+				["rewardFootcores"]: (number),
+			}) }),
+		}))
+			load_empty()
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 2)
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["achievementCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["completedAchievementCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["claimedAchievementCount"])
+			local len_75 = #Value["achievements"]
+			assert(len_75 <= 32, "value is more than 32!")
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_75)
+			for i_14 = 1, len_75 do
+				local bool_29 = 0
+				local bool_29_pos_1 = alloc(1)
+				local val_14 = Value["achievements"][i_14]
+				local len_76 = #val_14["id"]
+				assert(len_76 <= 128, "value is more than 128!")
+				assert(utf8.len(val_14["id"]) ~= nil, "value is not valid utf-8")
+				alloc(1)
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_76)
+				alloc(len_76)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_14["id"], len_76)
+				local len_77 = #val_14["displayName"]
+				assert(len_77 <= 256, "value is more than 256!")
+				assert(utf8.len(val_14["displayName"]) ~= nil, "value is not valid utf-8")
+				alloc(2)
+				buffer.writeu16(outgoing_buff, outgoing_apos, len_77)
+				alloc(len_77)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_14["displayName"], len_77)
+				local len_78 = #val_14["description"]
+				assert(len_78 <= 640, "value is more than 640!")
+				assert(utf8.len(val_14["description"]) ~= nil, "value is not valid utf-8")
+				alloc(2)
+				buffer.writeu16(outgoing_buff, outgoing_apos, len_78)
+				alloc(len_78)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_14["description"], len_78)
+				local len_79 = #val_14["type"]
+				assert(len_79 <= 128, "value is more than 128!")
+				assert(utf8.len(val_14["type"]) ~= nil, "value is not valid utf-8")
+				alloc(1)
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_79)
+				alloc(len_79)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_14["type"], len_79)
+				alloc(8)
+				buffer.writef64(outgoing_buff, outgoing_apos, val_14["progress"])
+				alloc(8)
+				buffer.writef64(outgoing_buff, outgoing_apos, val_14["target"])
+				if val_14["isComplete"] then
+					bool_29 = bit32.bor(bool_29, 0b0000000000000001)
+				end
+				if val_14["isClaimed"] then
+					bool_29 = bit32.bor(bool_29, 0b0000000000000010)
+				end
+				alloc(4)
+				buffer.writeu32(outgoing_buff, outgoing_apos, val_14["rewardFootgems"])
+				alloc(4)
+				buffer.writeu32(outgoing_buff, outgoing_apos, val_14["rewardFootcores"])
+				buffer.writeu8(outgoing_buff, bool_29_pos_1, bool_29)
+			end
+			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
+			for _, player in List do
+				load_player(player)
+				alloc(used)
+				buffer.copy(outgoing_buff, outgoing_apos, buff, 0, used)
+				table.move(inst, 1, #inst, #outgoing_inst + 1, outgoing_inst)
+				player_map[player] = save()
+			end
+		end,
+		FireSet = function(Set: { [Player]: any }, Value: ({
+			["achievementCount"]: (number),
+			["completedAchievementCount"]: (number),
+			["claimedAchievementCount"]: (number),
+			["achievements"]: ({ ({
+				["id"]: (string),
+				["displayName"]: (string),
+				["description"]: (string),
+				["type"]: (string),
+				["progress"]: (number),
+				["target"]: (number),
+				["isComplete"]: (boolean),
+				["isClaimed"]: (boolean),
+				["rewardFootgems"]: (number),
+				["rewardFootcores"]: (number),
+			}) }),
+		}))
+			load_empty()
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 2)
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["achievementCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["completedAchievementCount"])
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, Value["claimedAchievementCount"])
+			local len_80 = #Value["achievements"]
+			assert(len_80 <= 32, "value is more than 32!")
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_80)
+			for i_15 = 1, len_80 do
+				local bool_30 = 0
+				local bool_30_pos_1 = alloc(1)
+				local val_15 = Value["achievements"][i_15]
+				local len_81 = #val_15["id"]
+				assert(len_81 <= 128, "value is more than 128!")
+				assert(utf8.len(val_15["id"]) ~= nil, "value is not valid utf-8")
+				alloc(1)
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_81)
+				alloc(len_81)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_15["id"], len_81)
+				local len_82 = #val_15["displayName"]
+				assert(len_82 <= 256, "value is more than 256!")
+				assert(utf8.len(val_15["displayName"]) ~= nil, "value is not valid utf-8")
+				alloc(2)
+				buffer.writeu16(outgoing_buff, outgoing_apos, len_82)
+				alloc(len_82)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_15["displayName"], len_82)
+				local len_83 = #val_15["description"]
+				assert(len_83 <= 640, "value is more than 640!")
+				assert(utf8.len(val_15["description"]) ~= nil, "value is not valid utf-8")
+				alloc(2)
+				buffer.writeu16(outgoing_buff, outgoing_apos, len_83)
+				alloc(len_83)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_15["description"], len_83)
+				local len_84 = #val_15["type"]
+				assert(len_84 <= 128, "value is more than 128!")
+				assert(utf8.len(val_15["type"]) ~= nil, "value is not valid utf-8")
+				alloc(1)
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_84)
+				alloc(len_84)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_15["type"], len_84)
+				alloc(8)
+				buffer.writef64(outgoing_buff, outgoing_apos, val_15["progress"])
+				alloc(8)
+				buffer.writef64(outgoing_buff, outgoing_apos, val_15["target"])
+				if val_15["isComplete"] then
+					bool_30 = bit32.bor(bool_30, 0b0000000000000001)
+				end
+				if val_15["isClaimed"] then
+					bool_30 = bit32.bor(bool_30, 0b0000000000000010)
+				end
+				alloc(4)
+				buffer.writeu32(outgoing_buff, outgoing_apos, val_15["rewardFootgems"])
+				alloc(4)
+				buffer.writeu32(outgoing_buff, outgoing_apos, val_15["rewardFootcores"])
+				buffer.writeu8(outgoing_buff, bool_30_pos_1, bool_30)
+			end
+			local buff, used, inst = outgoing_buff, outgoing_used, outgoing_inst
+			for player in Set do
+				load_player(player)
+				alloc(used)
+				buffer.copy(outgoing_buff, outgoing_apos, buff, 0, used)
+				table.move(inst, 1, #inst, #outgoing_inst + 1, outgoing_inst)
+				player_map[player] = save()
 			end
 		end,
 	},

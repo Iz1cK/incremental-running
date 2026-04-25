@@ -1,0 +1,20 @@
+{
+  "name": "FootyenSummonsPackage",
+  "version": "1.0.0",
+  "type": "source-export",
+  "assumesBasePackages": ["React", "ReactRoblox", "Zap"],
+  "copyTargets": {
+    "src/client/PetSummonUi.local.lua": "src/client/PetSummonUi.local.lua",
+    "src/server/SummonAltarService.legacy.lua": "src/server/SummonAltarService.legacy.lua",
+    "src/shared/SummonConfig.lua": "src/shared/SummonConfig.lua",
+    "src/shared/BannerConfig.lua": "src/shared/BannerConfig.lua",
+    "src/shared/UiAssetConfig.lua": "src/shared/UiAssetConfig.lua"
+  },
+  "requiresHostFiles": [
+    "src/shared/PetConfig.lua",
+    "src/shared/PlayerStateStore.lua",
+    "src/config.zap",
+    "src/server/FootyenService.legacy.lua"
+  ],
+  "backendContractDoc": "docs/BACKEND_CONTRACT.md"
+}

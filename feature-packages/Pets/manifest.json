@@ -1,0 +1,15 @@
+{
+  "name": "FootyenPetsPackage",
+  "version": "1.0.0",
+  "type": "source-export",
+  "assumesBasePackages": ["React", "ReactRoblox", "Zap"],
+  "copyTargets": {
+    "src/shared/PetConfig.lua": "src/shared/PetConfig.lua",
+    "src/shared/PetAbilityConfig.lua": "src/shared/PetAbilityConfig.lua"
+  },
+  "requiresHostFiles": [
+    "src/shared/UiAssetConfig.lua",
+    "src/server/FootyenService.legacy.lua"
+  ],
+  "backendContractDoc": "docs/BACKEND_CONTRACT.md"
+}

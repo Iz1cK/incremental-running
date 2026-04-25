@@ -156,10 +156,19 @@ if not RunService:IsRunning() then
 		PetInventorySnapshot = table.freeze({
 			SetCallback = noop
 		}),
+		LiveConfigSnapshot = table.freeze({
+			SetCallback = noop
+		}),
 		GetPlayerState = table.freeze({
 			Call = noop
 		}),
 		GetPetInventory = table.freeze({
+			Call = noop
+		}),
+		GetLiveConfigSnapshot = table.freeze({
+			Call = noop
+		}),
+		GetAchievements = table.freeze({
 			Call = noop
 		}),
 		EquipBestPets = table.freeze({
@@ -170,6 +179,12 @@ if not RunService:IsRunning() then
 		}),
 		DeletePet = table.freeze({
 			Call = noop
+		}),
+		ClaimAchievement = table.freeze({
+			Call = noop
+		}),
+		AchievementSnapshot = table.freeze({
+			SetCallback = noop
 		}),
 	}) :: Events
 end
@@ -195,21 +210,26 @@ end
 
 RunService.Heartbeat:Connect(SendEvents)
 
-local reliable_events = table.create(12)
-local reliable_event_queue: { [number]: { any } } = table.create(12)
+local reliable_events = table.create(17)
+local reliable_event_queue: { [number]: { any } } = table.create(17)
 local function_call_id = 0
 reliable_event_queue[0] = {}
 reliable_event_queue[1] = {}
-reliable_event_queue[10] = table.create(255)
-reliable_event_queue[4] = table.create(255)
-reliable_event_queue[7] = table.create(255)
-reliable_event_queue[5] = table.create(255)
-reliable_event_queue[6] = table.create(255)
-reliable_event_queue[2] = table.create(255)
-reliable_event_queue[3] = table.create(255)
+reliable_event_queue[3] = {}
+reliable_event_queue[2] = {}
+reliable_event_queue[14] = table.create(255)
+reliable_event_queue[8] = table.create(255)
 reliable_event_queue[11] = table.create(255)
 reliable_event_queue[9] = table.create(255)
-reliable_event_queue[8] = table.create(255)
+reliable_event_queue[10] = table.create(255)
+reliable_event_queue[4] = table.create(255)
+reliable_event_queue[5] = table.create(255)
+reliable_event_queue[7] = table.create(255)
+reliable_event_queue[6] = table.create(255)
+reliable_event_queue[15] = table.create(255)
+reliable_event_queue[13] = table.create(255)
+reliable_event_queue[12] = table.create(255)
+reliable_event_queue[16] = table.create(255)
 reliable.OnClientEvent:Connect(function(buff, inst)
 	incoming_buff = buff
 	incoming_inst = inst
@@ -312,15 +332,170 @@ reliable.OnClientEvent:Connect(function(buff, inst)
 					warn(`[ZAP] {#reliable_event_queue[1]} events in queue for PetInventorySnapshot. Did you forget to attach a listener?`)
 				end
 			end
-		elseif id == 10 then -- UpgradePet
+		elseif id == 3 then -- LiveConfigSnapshot
+			local value
+			value = {  }
+			local len_4 = buffer.readu16(incoming_buff, read(2))
+			assert(len_4 <= 256, "value is more than 256!")
+			value["key"] = buffer.readstring(incoming_buff, read(len_4), len_4)
+			assert(utf8.len(value["key"]) ~= nil, "value is not valid utf-8")
+			local len_5 = buffer.readu32(incoming_buff, read(4))
+			assert(len_5 <= 262140, "value is more than 262140!")
+			value["payloadJson"] = buffer.readstring(incoming_buff, read(len_5), len_5)
+			assert(utf8.len(value["payloadJson"]) ~= nil, "value is not valid utf-8")
+			if reliable_events[3] then
+				task.spawn(reliable_events[3], value)
+			else
+				table.insert(reliable_event_queue[3], value)
+				if #reliable_event_queue[3] > 64 then
+					warn(`[ZAP] {#reliable_event_queue[3]} events in queue for LiveConfigSnapshot. Did you forget to attach a listener?`)
+				end
+			end
+		elseif id == 2 then -- AchievementSnapshot
+			local value
+			value = {  }
+			value["achievementCount"] = buffer.readu8(incoming_buff, read(1))
+			value["completedAchievementCount"] = buffer.readu8(incoming_buff, read(1))
+			value["claimedAchievementCount"] = buffer.readu8(incoming_buff, read(1))
+			local len_6 = buffer.readu8(incoming_buff, read(1))
+			assert(len_6 <= 32, "value is more than 32!")
+			value["achievements"] = table.create(len_6)
+			for i_2 = 1, len_6 do
+				local bool_3 = buffer.readu8(incoming_buff, read(1))
+				local val_2
+				val_2 = {  }
+				local len_7 = buffer.readu8(incoming_buff, read(1))
+				assert(len_7 <= 128, "value is more than 128!")
+				val_2["id"] = buffer.readstring(incoming_buff, read(len_7), len_7)
+				assert(utf8.len(val_2["id"]) ~= nil, "value is not valid utf-8")
+				local len_8 = buffer.readu16(incoming_buff, read(2))
+				assert(len_8 <= 256, "value is more than 256!")
+				val_2["displayName"] = buffer.readstring(incoming_buff, read(len_8), len_8)
+				assert(utf8.len(val_2["displayName"]) ~= nil, "value is not valid utf-8")
+				local len_9 = buffer.readu16(incoming_buff, read(2))
+				assert(len_9 <= 640, "value is more than 640!")
+				val_2["description"] = buffer.readstring(incoming_buff, read(len_9), len_9)
+				assert(utf8.len(val_2["description"]) ~= nil, "value is not valid utf-8")
+				local len_10 = buffer.readu8(incoming_buff, read(1))
+				assert(len_10 <= 128, "value is more than 128!")
+				val_2["type"] = buffer.readstring(incoming_buff, read(len_10), len_10)
+				assert(utf8.len(val_2["type"]) ~= nil, "value is not valid utf-8")
+				val_2["progress"] = buffer.readf64(incoming_buff, read(8))
+				val_2["target"] = buffer.readf64(incoming_buff, read(8))
+				val_2["isComplete"] = bit32.btest(bool_3, 0b0000000000000001)
+				val_2["isClaimed"] = bit32.btest(bool_3, 0b0000000000000010)
+				val_2["rewardFootgems"] = buffer.readu32(incoming_buff, read(4))
+				val_2["rewardFootcores"] = buffer.readu32(incoming_buff, read(4))
+				value["achievements"][i_2] = val_2
+			end
+			if reliable_events[2] then
+				task.spawn(reliable_events[2], value)
+			else
+				table.insert(reliable_event_queue[2], value)
+				if #reliable_event_queue[2] > 64 then
+					warn(`[ZAP] {#reliable_event_queue[2]} events in queue for AchievementSnapshot. Did you forget to attach a listener?`)
+				end
+			end
+		elseif id == 14 then -- UpgradePet
 			local call_id = buffer.readu8(incoming_buff, read(1))
 			local value
-			local bool_3 = buffer.readu8(incoming_buff, read(1))
+			local bool_4 = buffer.readu8(incoming_buff, read(1))
 			value = {  }
-			value["success"] = bit32.btest(bool_3, 0b0000000000000001)
-			local len_4 = buffer.readu16(incoming_buff, read(2))
-			assert(len_4 <= 640, "value is more than 640!")
-			value["message"] = buffer.readstring(incoming_buff, read(len_4), len_4)
+			value["success"] = bit32.btest(bool_4, 0b0000000000000001)
+			local len_11 = buffer.readu16(incoming_buff, read(2))
+			assert(len_11 <= 640, "value is more than 640!")
+			value["message"] = buffer.readstring(incoming_buff, read(len_11), len_11)
+			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
+			local thread = reliable_event_queue[14][call_id]
+			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
+			if thread then
+				task.spawn(thread, value)
+			end
+			reliable_event_queue[14][call_id] = nil
+		elseif id == 8 then -- SummonPets
+			local call_id = buffer.readu8(incoming_buff, read(1))
+			local value
+			local bool_5 = buffer.readu8(incoming_buff, read(1))
+			value = {  }
+			value["success"] = bit32.btest(bool_5, 0b0000000000000001)
+			local len_12 = buffer.readu16(incoming_buff, read(2))
+			assert(len_12 <= 640, "value is more than 640!")
+			value["message"] = buffer.readstring(incoming_buff, read(len_12), len_12)
+			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
+			value["spentFootgems"] = buffer.readu32(incoming_buff, read(4))
+			value["remainingFootgems"] = buffer.readu32(incoming_buff, read(4))
+			local len_13 = buffer.readu8(incoming_buff, read(1))
+			assert(len_13 <= 3, "value is more than 3!")
+			value["results"] = table.create(len_13)
+			for i_3 = 1, len_13 do
+				local bool_6 = buffer.readu8(incoming_buff, read(1))
+				local val_3
+				val_3 = {  }
+				local len_14 = buffer.readu8(incoming_buff, read(1))
+				assert(len_14 <= 192, "value is more than 192!")
+				val_3["uid"] = buffer.readstring(incoming_buff, read(len_14), len_14)
+				assert(utf8.len(val_3["uid"]) ~= nil, "value is not valid utf-8")
+				local len_15 = buffer.readu8(incoming_buff, read(1))
+				assert(len_15 <= 128, "value is more than 128!")
+				val_3["petId"] = buffer.readstring(incoming_buff, read(len_15), len_15)
+				assert(utf8.len(val_3["petId"]) ~= nil, "value is not valid utf-8")
+				local len_16 = buffer.readu8(incoming_buff, read(1))
+				assert(len_16 <= 64, "value is more than 64!")
+				val_3["rarity"] = buffer.readstring(incoming_buff, read(len_16), len_16)
+				assert(utf8.len(val_3["rarity"]) ~= nil, "value is not valid utf-8")
+				val_3["level"] = buffer.readu8(incoming_buff, read(1))
+				assert(val_3["level"] >= 1, "value is less than 1!")
+				assert(val_3["level"] <= 5, "value is more than 5!")
+				val_3["autoDeleted"] = bit32.btest(bool_6, 0b0000000000000001)
+				value["results"][i_3] = val_3
+			end
+			local thread = reliable_event_queue[8][call_id]
+			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
+			if thread then
+				task.spawn(thread, value)
+			end
+			reliable_event_queue[8][call_id] = nil
+		elseif id == 11 then -- SetPetEquipped
+			local call_id = buffer.readu8(incoming_buff, read(1))
+			local value
+			local bool_7 = buffer.readu8(incoming_buff, read(1))
+			value = {  }
+			value["success"] = bit32.btest(bool_7, 0b0000000000000001)
+			local len_17 = buffer.readu16(incoming_buff, read(2))
+			assert(len_17 <= 640, "value is more than 640!")
+			value["message"] = buffer.readstring(incoming_buff, read(len_17), len_17)
+			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
+			local thread = reliable_event_queue[11][call_id]
+			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
+			if thread then
+				task.spawn(thread, value)
+			end
+			reliable_event_queue[11][call_id] = nil
+		elseif id == 9 then -- PurchaseUpgrade
+			local call_id = buffer.readu8(incoming_buff, read(1))
+			local value
+			local bool_8 = buffer.readu8(incoming_buff, read(1))
+			value = {  }
+			value["success"] = bit32.btest(bool_8, 0b0000000000000001)
+			local len_18 = buffer.readu16(incoming_buff, read(2))
+			assert(len_18 <= 640, "value is more than 640!")
+			value["message"] = buffer.readstring(incoming_buff, read(len_18), len_18)
+			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
+			local thread = reliable_event_queue[9][call_id]
+			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
+			if thread then
+				task.spawn(thread, value)
+			end
+			reliable_event_queue[9][call_id] = nil
+		elseif id == 10 then -- PurchaseBootUpgrade
+			local call_id = buffer.readu8(incoming_buff, read(1))
+			local value
+			local bool_9 = buffer.readu8(incoming_buff, read(1))
+			value = {  }
+			value["success"] = bit32.btest(bool_9, 0b0000000000000001)
+			local len_19 = buffer.readu16(incoming_buff, read(2))
+			assert(len_19 <= 640, "value is more than 640!")
+			value["message"] = buffer.readstring(incoming_buff, read(len_19), len_19)
 			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
 			local thread = reliable_event_queue[10][call_id]
 			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
@@ -328,101 +503,10 @@ reliable.OnClientEvent:Connect(function(buff, inst)
 				task.spawn(thread, value)
 			end
 			reliable_event_queue[10][call_id] = nil
-		elseif id == 4 then -- SummonPets
+		elseif id == 4 then -- GetPlayerState
 			local call_id = buffer.readu8(incoming_buff, read(1))
 			local value
-			local bool_4 = buffer.readu8(incoming_buff, read(1))
-			value = {  }
-			value["success"] = bit32.btest(bool_4, 0b0000000000000001)
-			local len_5 = buffer.readu16(incoming_buff, read(2))
-			assert(len_5 <= 640, "value is more than 640!")
-			value["message"] = buffer.readstring(incoming_buff, read(len_5), len_5)
-			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
-			value["spentFootgems"] = buffer.readu32(incoming_buff, read(4))
-			value["remainingFootgems"] = buffer.readu32(incoming_buff, read(4))
-			local len_6 = buffer.readu8(incoming_buff, read(1))
-			assert(len_6 <= 3, "value is more than 3!")
-			value["results"] = table.create(len_6)
-			for i_2 = 1, len_6 do
-				local bool_5 = buffer.readu8(incoming_buff, read(1))
-				local val_2
-				val_2 = {  }
-				local len_7 = buffer.readu8(incoming_buff, read(1))
-				assert(len_7 <= 192, "value is more than 192!")
-				val_2["uid"] = buffer.readstring(incoming_buff, read(len_7), len_7)
-				assert(utf8.len(val_2["uid"]) ~= nil, "value is not valid utf-8")
-				local len_8 = buffer.readu8(incoming_buff, read(1))
-				assert(len_8 <= 128, "value is more than 128!")
-				val_2["petId"] = buffer.readstring(incoming_buff, read(len_8), len_8)
-				assert(utf8.len(val_2["petId"]) ~= nil, "value is not valid utf-8")
-				local len_9 = buffer.readu8(incoming_buff, read(1))
-				assert(len_9 <= 64, "value is more than 64!")
-				val_2["rarity"] = buffer.readstring(incoming_buff, read(len_9), len_9)
-				assert(utf8.len(val_2["rarity"]) ~= nil, "value is not valid utf-8")
-				val_2["level"] = buffer.readu8(incoming_buff, read(1))
-				assert(val_2["level"] >= 1, "value is less than 1!")
-				assert(val_2["level"] <= 5, "value is more than 5!")
-				val_2["autoDeleted"] = bit32.btest(bool_5, 0b0000000000000001)
-				value["results"][i_2] = val_2
-			end
-			local thread = reliable_event_queue[4][call_id]
-			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
-			if thread then
-				task.spawn(thread, value)
-			end
-			reliable_event_queue[4][call_id] = nil
-		elseif id == 7 then -- SetPetEquipped
-			local call_id = buffer.readu8(incoming_buff, read(1))
-			local value
-			local bool_6 = buffer.readu8(incoming_buff, read(1))
-			value = {  }
-			value["success"] = bit32.btest(bool_6, 0b0000000000000001)
-			local len_10 = buffer.readu16(incoming_buff, read(2))
-			assert(len_10 <= 640, "value is more than 640!")
-			value["message"] = buffer.readstring(incoming_buff, read(len_10), len_10)
-			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
-			local thread = reliable_event_queue[7][call_id]
-			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
-			if thread then
-				task.spawn(thread, value)
-			end
-			reliable_event_queue[7][call_id] = nil
-		elseif id == 5 then -- PurchaseUpgrade
-			local call_id = buffer.readu8(incoming_buff, read(1))
-			local value
-			local bool_7 = buffer.readu8(incoming_buff, read(1))
-			value = {  }
-			value["success"] = bit32.btest(bool_7, 0b0000000000000001)
-			local len_11 = buffer.readu16(incoming_buff, read(2))
-			assert(len_11 <= 640, "value is more than 640!")
-			value["message"] = buffer.readstring(incoming_buff, read(len_11), len_11)
-			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
-			local thread = reliable_event_queue[5][call_id]
-			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
-			if thread then
-				task.spawn(thread, value)
-			end
-			reliable_event_queue[5][call_id] = nil
-		elseif id == 6 then -- PurchaseBootUpgrade
-			local call_id = buffer.readu8(incoming_buff, read(1))
-			local value
-			local bool_8 = buffer.readu8(incoming_buff, read(1))
-			value = {  }
-			value["success"] = bit32.btest(bool_8, 0b0000000000000001)
-			local len_12 = buffer.readu16(incoming_buff, read(2))
-			assert(len_12 <= 640, "value is more than 640!")
-			value["message"] = buffer.readstring(incoming_buff, read(len_12), len_12)
-			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
-			local thread = reliable_event_queue[6][call_id]
-			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
-			if thread then
-				task.spawn(thread, value)
-			end
-			reliable_event_queue[6][call_id] = nil
-		elseif id == 2 then -- GetPlayerState
-			local call_id = buffer.readu8(incoming_buff, read(1))
-			local value
-			local bool_9 = buffer.readu8(incoming_buff, read(1))
+			local bool_10 = buffer.readu8(incoming_buff, read(1))
 			value = {  }
 			value["footyens"] = buffer.readu32(incoming_buff, read(4))
 			value["footgems"] = buffer.readu32(incoming_buff, read(4))
@@ -456,26 +540,26 @@ reliable.OnClientEvent:Connect(function(buff, inst)
 			value["equippedPetCount"] = buffer.readu8(incoming_buff, read(1))
 			value["petFootyenMultiplier"] = buffer.readf64(incoming_buff, read(8))
 			value["petPassivePerSecond"] = buffer.readf64(incoming_buff, read(8))
-			value["shopHasFootyenGain10x"] = bit32.btest(bool_9, 0b0000000000000001)
-			value["shopHasMovementSpeed5x"] = bit32.btest(bool_9, 0b0000000000000010)
-			value["shopHasTripleSummon"] = bit32.btest(bool_9, 0b0000000000000100)
-			value["shopHasExtraEquipTwo"] = bit32.btest(bool_9, 0b0000000000001000)
-			value["shopHasLuckySummon"] = bit32.btest(bool_9, 0b0000000000010000)
-			value["shopHasBootMagnet"] = bit32.btest(bool_9, 0b0000000000100000)
-			value["shopHasPetPassiveAura"] = bit32.btest(bool_9, 0b0000000001000000)
+			value["shopHasFootyenGain10x"] = bit32.btest(bool_10, 0b0000000000000001)
+			value["shopHasMovementSpeed5x"] = bit32.btest(bool_10, 0b0000000000000010)
+			value["shopHasTripleSummon"] = bit32.btest(bool_10, 0b0000000000000100)
+			value["shopHasExtraEquipTwo"] = bit32.btest(bool_10, 0b0000000000001000)
+			value["shopHasLuckySummon"] = bit32.btest(bool_10, 0b0000000000010000)
+			value["shopHasBootMagnet"] = bit32.btest(bool_10, 0b0000000000100000)
+			value["shopHasPetPassiveAura"] = bit32.btest(bool_10, 0b0000000001000000)
 			value["shopExtraPetSlotsCount"] = buffer.readu16(incoming_buff, read(2))
 			value["shopPetPassiveOverclockCount"] = buffer.readu8(incoming_buff, read(1))
 			value["shopBootValueCoreCount"] = buffer.readu8(incoming_buff, read(1))
-			value["isSprinting"] = bit32.btest(bool_9, 0b0000000010000000)
+			value["isSprinting"] = bit32.btest(bool_10, 0b0000000010000000)
 			value["sprintEndsAt"] = buffer.readf64(incoming_buff, read(8))
 			value["cooldownEndsAt"] = buffer.readf64(incoming_buff, read(8))
-			local thread = reliable_event_queue[2][call_id]
+			local thread = reliable_event_queue[4][call_id]
 			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
 			if thread then
 				task.spawn(thread, value)
 			end
-			reliable_event_queue[2][call_id] = nil
-		elseif id == 3 then -- GetPetInventory
+			reliable_event_queue[4][call_id] = nil
+		elseif id == 5 then -- GetPetInventory
 			local call_id = buffer.readu8(incoming_buff, read(1))
 			local value
 			value = {  }
@@ -484,81 +568,159 @@ reliable.OnClientEvent:Connect(function(buff, inst)
 			value["petInventoryCount"] = buffer.readu8(incoming_buff, read(1))
 			value["petEquipLimit"] = buffer.readu8(incoming_buff, read(1))
 			value["equippedPetCount"] = buffer.readu8(incoming_buff, read(1))
-			local len_13 = buffer.readu8(incoming_buff, read(1))
-			assert(len_13 <= 45, "value is more than 45!")
-			value["pets"] = table.create(len_13)
-			for i_3 = 1, len_13 do
-				local bool_10 = buffer.readu8(incoming_buff, read(1))
-				local val_3
-				val_3 = {  }
-				local len_14 = buffer.readu8(incoming_buff, read(1))
-				assert(len_14 <= 192, "value is more than 192!")
-				val_3["uid"] = buffer.readstring(incoming_buff, read(len_14), len_14)
-				assert(utf8.len(val_3["uid"]) ~= nil, "value is not valid utf-8")
-				local len_15 = buffer.readu8(incoming_buff, read(1))
-				assert(len_15 <= 128, "value is more than 128!")
-				val_3["petId"] = buffer.readstring(incoming_buff, read(len_15), len_15)
-				assert(utf8.len(val_3["petId"]) ~= nil, "value is not valid utf-8")
-				val_3["level"] = buffer.readu8(incoming_buff, read(1))
-				assert(val_3["level"] >= 1, "value is less than 1!")
-				assert(val_3["level"] <= 5, "value is more than 5!")
-				val_3["isEquipped"] = bit32.btest(bool_10, 0b0000000000000001)
-				value["pets"][i_3] = val_3
+			local len_20 = buffer.readu8(incoming_buff, read(1))
+			assert(len_20 <= 45, "value is more than 45!")
+			value["pets"] = table.create(len_20)
+			for i_4 = 1, len_20 do
+				local bool_11 = buffer.readu8(incoming_buff, read(1))
+				local val_4
+				val_4 = {  }
+				local len_21 = buffer.readu8(incoming_buff, read(1))
+				assert(len_21 <= 192, "value is more than 192!")
+				val_4["uid"] = buffer.readstring(incoming_buff, read(len_21), len_21)
+				assert(utf8.len(val_4["uid"]) ~= nil, "value is not valid utf-8")
+				local len_22 = buffer.readu8(incoming_buff, read(1))
+				assert(len_22 <= 128, "value is more than 128!")
+				val_4["petId"] = buffer.readstring(incoming_buff, read(len_22), len_22)
+				assert(utf8.len(val_4["petId"]) ~= nil, "value is not valid utf-8")
+				val_4["level"] = buffer.readu8(incoming_buff, read(1))
+				assert(val_4["level"] >= 1, "value is less than 1!")
+				assert(val_4["level"] <= 5, "value is more than 5!")
+				val_4["isEquipped"] = bit32.btest(bool_11, 0b0000000000000001)
+				value["pets"][i_4] = val_4
 			end
-			local thread = reliable_event_queue[3][call_id]
+			local thread = reliable_event_queue[5][call_id]
 			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
 			if thread then
 				task.spawn(thread, value)
 			end
-			reliable_event_queue[3][call_id] = nil
-		elseif id == 11 then -- EquipBestPets
-			local call_id = buffer.readu8(incoming_buff, read(1))
-			local value
-			local bool_11 = buffer.readu8(incoming_buff, read(1))
-			value = {  }
-			value["success"] = bit32.btest(bool_11, 0b0000000000000001)
-			local len_16 = buffer.readu16(incoming_buff, read(2))
-			assert(len_16 <= 640, "value is more than 640!")
-			value["message"] = buffer.readstring(incoming_buff, read(len_16), len_16)
-			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
-			local thread = reliable_event_queue[11][call_id]
-			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
-			if thread then
-				task.spawn(thread, value)
-			end
-			reliable_event_queue[11][call_id] = nil
-		elseif id == 9 then -- DeletePets
+			reliable_event_queue[5][call_id] = nil
+		elseif id == 7 then -- GetLiveConfigSnapshot
 			local call_id = buffer.readu8(incoming_buff, read(1))
 			local value
 			local bool_12 = buffer.readu8(incoming_buff, read(1))
 			value = {  }
-			value["success"] = bit32.btest(bool_12, 0b0000000000000001)
-			local len_17 = buffer.readu16(incoming_buff, read(2))
-			assert(len_17 <= 640, "value is more than 640!")
-			value["message"] = buffer.readstring(incoming_buff, read(len_17), len_17)
-			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
-			local thread = reliable_event_queue[9][call_id]
+			value["found"] = bit32.btest(bool_12, 0b0000000000000001)
+			local len_23 = buffer.readu32(incoming_buff, read(4))
+			assert(len_23 <= 262140, "value is more than 262140!")
+			value["payloadJson"] = buffer.readstring(incoming_buff, read(len_23), len_23)
+			assert(utf8.len(value["payloadJson"]) ~= nil, "value is not valid utf-8")
+			local thread = reliable_event_queue[7][call_id]
 			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
 			if thread then
 				task.spawn(thread, value)
 			end
-			reliable_event_queue[9][call_id] = nil
-		elseif id == 8 then -- DeletePet
+			reliable_event_queue[7][call_id] = nil
+		elseif id == 6 then -- GetAchievements
 			local call_id = buffer.readu8(incoming_buff, read(1))
 			local value
-			local bool_13 = buffer.readu8(incoming_buff, read(1))
 			value = {  }
-			value["success"] = bit32.btest(bool_13, 0b0000000000000001)
-			local len_18 = buffer.readu16(incoming_buff, read(2))
-			assert(len_18 <= 640, "value is more than 640!")
-			value["message"] = buffer.readstring(incoming_buff, read(len_18), len_18)
-			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
-			local thread = reliable_event_queue[8][call_id]
+			value["achievementCount"] = buffer.readu8(incoming_buff, read(1))
+			value["completedAchievementCount"] = buffer.readu8(incoming_buff, read(1))
+			value["claimedAchievementCount"] = buffer.readu8(incoming_buff, read(1))
+			local len_24 = buffer.readu8(incoming_buff, read(1))
+			assert(len_24 <= 32, "value is more than 32!")
+			value["achievements"] = table.create(len_24)
+			for i_5 = 1, len_24 do
+				local bool_13 = buffer.readu8(incoming_buff, read(1))
+				local val_5
+				val_5 = {  }
+				local len_25 = buffer.readu8(incoming_buff, read(1))
+				assert(len_25 <= 128, "value is more than 128!")
+				val_5["id"] = buffer.readstring(incoming_buff, read(len_25), len_25)
+				assert(utf8.len(val_5["id"]) ~= nil, "value is not valid utf-8")
+				local len_26 = buffer.readu16(incoming_buff, read(2))
+				assert(len_26 <= 256, "value is more than 256!")
+				val_5["displayName"] = buffer.readstring(incoming_buff, read(len_26), len_26)
+				assert(utf8.len(val_5["displayName"]) ~= nil, "value is not valid utf-8")
+				local len_27 = buffer.readu16(incoming_buff, read(2))
+				assert(len_27 <= 640, "value is more than 640!")
+				val_5["description"] = buffer.readstring(incoming_buff, read(len_27), len_27)
+				assert(utf8.len(val_5["description"]) ~= nil, "value is not valid utf-8")
+				local len_28 = buffer.readu8(incoming_buff, read(1))
+				assert(len_28 <= 128, "value is more than 128!")
+				val_5["type"] = buffer.readstring(incoming_buff, read(len_28), len_28)
+				assert(utf8.len(val_5["type"]) ~= nil, "value is not valid utf-8")
+				val_5["progress"] = buffer.readf64(incoming_buff, read(8))
+				val_5["target"] = buffer.readf64(incoming_buff, read(8))
+				val_5["isComplete"] = bit32.btest(bool_13, 0b0000000000000001)
+				val_5["isClaimed"] = bit32.btest(bool_13, 0b0000000000000010)
+				val_5["rewardFootgems"] = buffer.readu32(incoming_buff, read(4))
+				val_5["rewardFootcores"] = buffer.readu32(incoming_buff, read(4))
+				value["achievements"][i_5] = val_5
+			end
+			local thread = reliable_event_queue[6][call_id]
 			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
 			if thread then
 				task.spawn(thread, value)
 			end
-			reliable_event_queue[8][call_id] = nil
+			reliable_event_queue[6][call_id] = nil
+		elseif id == 15 then -- EquipBestPets
+			local call_id = buffer.readu8(incoming_buff, read(1))
+			local value
+			local bool_14 = buffer.readu8(incoming_buff, read(1))
+			value = {  }
+			value["success"] = bit32.btest(bool_14, 0b0000000000000001)
+			local len_29 = buffer.readu16(incoming_buff, read(2))
+			assert(len_29 <= 640, "value is more than 640!")
+			value["message"] = buffer.readstring(incoming_buff, read(len_29), len_29)
+			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
+			local thread = reliable_event_queue[15][call_id]
+			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
+			if thread then
+				task.spawn(thread, value)
+			end
+			reliable_event_queue[15][call_id] = nil
+		elseif id == 13 then -- DeletePets
+			local call_id = buffer.readu8(incoming_buff, read(1))
+			local value
+			local bool_15 = buffer.readu8(incoming_buff, read(1))
+			value = {  }
+			value["success"] = bit32.btest(bool_15, 0b0000000000000001)
+			local len_30 = buffer.readu16(incoming_buff, read(2))
+			assert(len_30 <= 640, "value is more than 640!")
+			value["message"] = buffer.readstring(incoming_buff, read(len_30), len_30)
+			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
+			local thread = reliable_event_queue[13][call_id]
+			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
+			if thread then
+				task.spawn(thread, value)
+			end
+			reliable_event_queue[13][call_id] = nil
+		elseif id == 12 then -- DeletePet
+			local call_id = buffer.readu8(incoming_buff, read(1))
+			local value
+			local bool_16 = buffer.readu8(incoming_buff, read(1))
+			value = {  }
+			value["success"] = bit32.btest(bool_16, 0b0000000000000001)
+			local len_31 = buffer.readu16(incoming_buff, read(2))
+			assert(len_31 <= 640, "value is more than 640!")
+			value["message"] = buffer.readstring(incoming_buff, read(len_31), len_31)
+			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
+			local thread = reliable_event_queue[12][call_id]
+			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
+			if thread then
+				task.spawn(thread, value)
+			end
+			reliable_event_queue[12][call_id] = nil
+		elseif id == 16 then -- ClaimAchievement
+			local call_id = buffer.readu8(incoming_buff, read(1))
+			local value
+			local bool_17 = buffer.readu8(incoming_buff, read(1))
+			value = {  }
+			value["success"] = bit32.btest(bool_17, 0b0000000000000001)
+			local len_32 = buffer.readu16(incoming_buff, read(2))
+			assert(len_32 <= 640, "value is more than 640!")
+			value["message"] = buffer.readstring(incoming_buff, read(len_32), len_32)
+			assert(utf8.len(value["message"]) ~= nil, "value is not valid utf-8")
+			value["awardedFootgems"] = buffer.readu32(incoming_buff, read(4))
+			value["awardedFootcores"] = buffer.readu32(incoming_buff, read(4))
+			local thread = reliable_event_queue[16][call_id]
+			-- When using actors it's possible for multiple Zap clients to exist, but only one called the Zap remote function.
+			if thread then
+				task.spawn(thread, value)
+			end
+			reliable_event_queue[16][call_id] = nil
 		else
 			error("Unknown event id")
 		end
@@ -576,22 +738,22 @@ local returns = {
 		}))
 			function_call_id += 1
 			function_call_id %= 256
-			if reliable_event_queue[10][function_call_id] then
+			if reliable_event_queue[14][function_call_id] then
 				function_call_id -= 1
 				error("Zap has more than 256 calls awaiting a response, and therefore this packet has been dropped")
 			end
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, 9)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 11)
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, function_call_id)
-			local len_19 = #Value
-			assert(len_19 <= 192, "value is more than 192!")
+			local len_33 = #Value
+			assert(len_33 <= 192, "value is more than 192!")
 			assert(utf8.len(Value) ~= nil, "value is not valid utf-8")
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, len_19)
-			alloc(len_19)
-			buffer.writestring(outgoing_buff, outgoing_apos, Value, len_19)
-			reliable_event_queue[10][function_call_id] = coroutine.running()
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_33)
+			alloc(len_33)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value, len_33)
+			reliable_event_queue[14][function_call_id] = coroutine.running()
 			return coroutine.yield()
 		end,
 	},
@@ -615,40 +777,40 @@ local returns = {
 		}))
 			function_call_id += 1
 			function_call_id %= 256
-			if reliable_event_queue[4][function_call_id] then
+			if reliable_event_queue[8][function_call_id] then
 				function_call_id -= 1
 				error("Zap has more than 256 calls awaiting a response, and therefore this packet has been dropped")
 			end
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, 3)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 5)
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, function_call_id)
-			local len_20 = #Value["altarId"]
-			assert(len_20 <= 128, "value is more than 128!")
+			local len_34 = #Value["altarId"]
+			assert(len_34 <= 128, "value is more than 128!")
 			assert(utf8.len(Value["altarId"]) ~= nil, "value is not valid utf-8")
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, len_20)
-			alloc(len_20)
-			buffer.writestring(outgoing_buff, outgoing_apos, Value["altarId"], len_20)
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_34)
+			alloc(len_34)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value["altarId"], len_34)
 			assert(Value["amount"] >= 1, "value is less than 1!")
 			assert(Value["amount"] <= 3, "value is more than 3!")
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, Value["amount"])
-			local len_21 = #Value["autoDeletePetIds"]
-			assert(len_21 <= 6, "value is more than 6!")
+			local len_35 = #Value["autoDeletePetIds"]
+			assert(len_35 <= 6, "value is more than 6!")
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, len_21)
-			for i_4 = 1, len_21 do
-				local val_4 = Value["autoDeletePetIds"][i_4]
-				local len_22 = #val_4
-				assert(len_22 <= 128, "value is more than 128!")
-				assert(utf8.len(val_4) ~= nil, "value is not valid utf-8")
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_35)
+			for i_6 = 1, len_35 do
+				local val_6 = Value["autoDeletePetIds"][i_6]
+				local len_36 = #val_6
+				assert(len_36 <= 128, "value is more than 128!")
+				assert(utf8.len(val_6) ~= nil, "value is not valid utf-8")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, len_22)
-				alloc(len_22)
-				buffer.writestring(outgoing_buff, outgoing_apos, val_4, len_22)
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_36)
+				alloc(len_36)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_6, len_36)
 			end
-			reliable_event_queue[4][function_call_id] = coroutine.running()
+			reliable_event_queue[8][function_call_id] = coroutine.running()
 			return coroutine.yield()
 		end,
 	},
@@ -662,28 +824,28 @@ local returns = {
 		}))
 			function_call_id += 1
 			function_call_id %= 256
-			if reliable_event_queue[7][function_call_id] then
+			if reliable_event_queue[11][function_call_id] then
 				function_call_id -= 1
 				error("Zap has more than 256 calls awaiting a response, and therefore this packet has been dropped")
 			end
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, 6)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 8)
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, function_call_id)
-			local bool_14 = 0
-			local bool_14_pos_1 = alloc(1)
-			local len_23 = #Value["uid"]
-			assert(len_23 <= 192, "value is more than 192!")
+			local bool_18 = 0
+			local bool_18_pos_1 = alloc(1)
+			local len_37 = #Value["uid"]
+			assert(len_37 <= 192, "value is more than 192!")
 			assert(utf8.len(Value["uid"]) ~= nil, "value is not valid utf-8")
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, len_23)
-			alloc(len_23)
-			buffer.writestring(outgoing_buff, outgoing_apos, Value["uid"], len_23)
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_37)
+			alloc(len_37)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value["uid"], len_37)
 			if Value["equipped"] then
-				bool_14 = bit32.bor(bool_14, 0b0000000000000001)
+				bool_18 = bit32.bor(bool_18, 0b0000000000000001)
 			end
-			buffer.writeu8(outgoing_buff, bool_14_pos_1, bool_14)
-			reliable_event_queue[7][function_call_id] = coroutine.running()
+			buffer.writeu8(outgoing_buff, bool_18_pos_1, bool_18)
+			reliable_event_queue[11][function_call_id] = coroutine.running()
 			return coroutine.yield()
 		end,
 	},
@@ -700,22 +862,22 @@ local returns = {
 		}))
 			function_call_id += 1
 			function_call_id %= 256
-			if reliable_event_queue[5][function_call_id] then
+			if reliable_event_queue[9][function_call_id] then
 				function_call_id -= 1
 				error("Zap has more than 256 calls awaiting a response, and therefore this packet has been dropped")
 			end
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, 4)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 6)
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, function_call_id)
-			local len_24 = #Value
-			assert(len_24 <= 128, "value is more than 128!")
+			local len_38 = #Value
+			assert(len_38 <= 128, "value is more than 128!")
 			assert(utf8.len(Value) ~= nil, "value is not valid utf-8")
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, len_24)
-			alloc(len_24)
-			buffer.writestring(outgoing_buff, outgoing_apos, Value, len_24)
-			reliable_event_queue[5][function_call_id] = coroutine.running()
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_38)
+			alloc(len_38)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value, len_38)
+			reliable_event_queue[9][function_call_id] = coroutine.running()
 			return coroutine.yield()
 		end,
 	},
@@ -726,22 +888,22 @@ local returns = {
 		}))
 			function_call_id += 1
 			function_call_id %= 256
-			if reliable_event_queue[6][function_call_id] then
+			if reliable_event_queue[10][function_call_id] then
 				function_call_id -= 1
 				error("Zap has more than 256 calls awaiting a response, and therefore this packet has been dropped")
 			end
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, 5)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 7)
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, function_call_id)
-			local len_25 = #Value
-			assert(len_25 <= 128, "value is more than 128!")
+			local len_39 = #Value
+			assert(len_39 <= 128, "value is more than 128!")
 			assert(utf8.len(Value) ~= nil, "value is not valid utf-8")
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, len_25)
-			alloc(len_25)
-			buffer.writestring(outgoing_buff, outgoing_apos, Value, len_25)
-			reliable_event_queue[6][function_call_id] = coroutine.running()
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_39)
+			alloc(len_39)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value, len_39)
+			reliable_event_queue[10][function_call_id] = coroutine.running()
 			return coroutine.yield()
 		end,
 	},
@@ -827,6 +989,21 @@ local returns = {
 			end
 		end,
 	},
+	LiveConfigSnapshot = {
+		SetCallback = function(Callback: (Value: ({
+			["key"]: (string),
+			["payloadJson"]: (string),
+		})) -> ()): () -> ()
+			reliable_events[3] = Callback
+			for _, value in reliable_event_queue[3] do
+				task.spawn(Callback, value)
+			end
+			reliable_event_queue[3] = {}
+			return function()
+				reliable_events[3] = nil
+			end
+		end,
+	},
 	GetPlayerState = {
 		Call = function(): (({
 			["footyens"]: (number),
@@ -877,7 +1054,7 @@ local returns = {
 		}))
 			function_call_id += 1
 			function_call_id %= 256
-			if reliable_event_queue[2][function_call_id] then
+			if reliable_event_queue[4][function_call_id] then
 				function_call_id -= 1
 				error("Zap has more than 256 calls awaiting a response, and therefore this packet has been dropped")
 			end
@@ -885,7 +1062,7 @@ local returns = {
 			buffer.writeu8(outgoing_buff, outgoing_apos, 1)
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, function_call_id)
-			reliable_event_queue[2][function_call_id] = coroutine.running()
+			reliable_event_queue[4][function_call_id] = coroutine.running()
 			return coroutine.yield()
 		end,
 	},
@@ -905,7 +1082,7 @@ local returns = {
 		}))
 			function_call_id += 1
 			function_call_id %= 256
-			if reliable_event_queue[3][function_call_id] then
+			if reliable_event_queue[5][function_call_id] then
 				function_call_id -= 1
 				error("Zap has more than 256 calls awaiting a response, and therefore this packet has been dropped")
 			end
@@ -913,7 +1090,65 @@ local returns = {
 			buffer.writeu8(outgoing_buff, outgoing_apos, 2)
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, function_call_id)
-			reliable_event_queue[3][function_call_id] = coroutine.running()
+			reliable_event_queue[5][function_call_id] = coroutine.running()
+			return coroutine.yield()
+		end,
+	},
+	GetLiveConfigSnapshot = {
+		Call = function(Value: (string)): (({
+			["found"]: (boolean),
+			["payloadJson"]: (string),
+		}))
+			function_call_id += 1
+			function_call_id %= 256
+			if reliable_event_queue[7][function_call_id] then
+				function_call_id -= 1
+				error("Zap has more than 256 calls awaiting a response, and therefore this packet has been dropped")
+			end
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 4)
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, function_call_id)
+			local len_40 = #Value
+			assert(len_40 <= 256, "value is more than 256!")
+			assert(utf8.len(Value) ~= nil, "value is not valid utf-8")
+			alloc(2)
+			buffer.writeu16(outgoing_buff, outgoing_apos, len_40)
+			alloc(len_40)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value, len_40)
+			reliable_event_queue[7][function_call_id] = coroutine.running()
+			return coroutine.yield()
+		end,
+	},
+	GetAchievements = {
+		Call = function(): (({
+			["achievementCount"]: (number),
+			["completedAchievementCount"]: (number),
+			["claimedAchievementCount"]: (number),
+			["achievements"]: ({ ({
+				["id"]: (string),
+				["displayName"]: (string),
+				["description"]: (string),
+				["type"]: (string),
+				["progress"]: (number),
+				["target"]: (number),
+				["isComplete"]: (boolean),
+				["isClaimed"]: (boolean),
+				["rewardFootgems"]: (number),
+				["rewardFootcores"]: (number),
+			}) }),
+		}))
+			function_call_id += 1
+			function_call_id %= 256
+			if reliable_event_queue[6][function_call_id] then
+				function_call_id -= 1
+				error("Zap has more than 256 calls awaiting a response, and therefore this packet has been dropped")
+			end
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 3)
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, function_call_id)
+			reliable_event_queue[6][function_call_id] = coroutine.running()
 			return coroutine.yield()
 		end,
 	},
@@ -924,15 +1159,15 @@ local returns = {
 		}))
 			function_call_id += 1
 			function_call_id %= 256
-			if reliable_event_queue[11][function_call_id] then
+			if reliable_event_queue[15][function_call_id] then
 				function_call_id -= 1
 				error("Zap has more than 256 calls awaiting a response, and therefore this packet has been dropped")
 			end
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, 10)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 12)
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, function_call_id)
-			reliable_event_queue[11][function_call_id] = coroutine.running()
+			reliable_event_queue[15][function_call_id] = coroutine.running()
 			return coroutine.yield()
 		end,
 	},
@@ -943,29 +1178,29 @@ local returns = {
 		}))
 			function_call_id += 1
 			function_call_id %= 256
-			if reliable_event_queue[9][function_call_id] then
+			if reliable_event_queue[13][function_call_id] then
 				function_call_id -= 1
 				error("Zap has more than 256 calls awaiting a response, and therefore this packet has been dropped")
 			end
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, 8)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 10)
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, function_call_id)
-			local len_26 = #Value
-			assert(len_26 <= 45, "value is more than 45!")
+			local len_41 = #Value
+			assert(len_41 <= 45, "value is more than 45!")
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, len_26)
-			for i_5 = 1, len_26 do
-				local val_5 = Value[i_5]
-				local len_27 = #val_5
-				assert(len_27 <= 192, "value is more than 192!")
-				assert(utf8.len(val_5) ~= nil, "value is not valid utf-8")
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_41)
+			for i_7 = 1, len_41 do
+				local val_7 = Value[i_7]
+				local len_42 = #val_7
+				assert(len_42 <= 192, "value is more than 192!")
+				assert(utf8.len(val_7) ~= nil, "value is not valid utf-8")
 				alloc(1)
-				buffer.writeu8(outgoing_buff, outgoing_apos, len_27)
-				alloc(len_27)
-				buffer.writestring(outgoing_buff, outgoing_apos, val_5, len_27)
+				buffer.writeu8(outgoing_buff, outgoing_apos, len_42)
+				alloc(len_42)
+				buffer.writestring(outgoing_buff, outgoing_apos, val_7, len_42)
 			end
-			reliable_event_queue[9][function_call_id] = coroutine.running()
+			reliable_event_queue[13][function_call_id] = coroutine.running()
 			return coroutine.yield()
 		end,
 	},
@@ -976,23 +1211,79 @@ local returns = {
 		}))
 			function_call_id += 1
 			function_call_id %= 256
-			if reliable_event_queue[8][function_call_id] then
+			if reliable_event_queue[12][function_call_id] then
 				function_call_id -= 1
 				error("Zap has more than 256 calls awaiting a response, and therefore this packet has been dropped")
 			end
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, 7)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 9)
 			alloc(1)
 			buffer.writeu8(outgoing_buff, outgoing_apos, function_call_id)
-			local len_28 = #Value
-			assert(len_28 <= 192, "value is more than 192!")
+			local len_43 = #Value
+			assert(len_43 <= 192, "value is more than 192!")
 			assert(utf8.len(Value) ~= nil, "value is not valid utf-8")
 			alloc(1)
-			buffer.writeu8(outgoing_buff, outgoing_apos, len_28)
-			alloc(len_28)
-			buffer.writestring(outgoing_buff, outgoing_apos, Value, len_28)
-			reliable_event_queue[8][function_call_id] = coroutine.running()
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_43)
+			alloc(len_43)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value, len_43)
+			reliable_event_queue[12][function_call_id] = coroutine.running()
 			return coroutine.yield()
+		end,
+	},
+	ClaimAchievement = {
+		Call = function(Value: (string)): (({
+			["success"]: (boolean),
+			["message"]: (string),
+			["awardedFootgems"]: (number),
+			["awardedFootcores"]: (number),
+		}))
+			function_call_id += 1
+			function_call_id %= 256
+			if reliable_event_queue[16][function_call_id] then
+				function_call_id -= 1
+				error("Zap has more than 256 calls awaiting a response, and therefore this packet has been dropped")
+			end
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, 13)
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, function_call_id)
+			local len_44 = #Value
+			assert(len_44 <= 128, "value is more than 128!")
+			assert(utf8.len(Value) ~= nil, "value is not valid utf-8")
+			alloc(1)
+			buffer.writeu8(outgoing_buff, outgoing_apos, len_44)
+			alloc(len_44)
+			buffer.writestring(outgoing_buff, outgoing_apos, Value, len_44)
+			reliable_event_queue[16][function_call_id] = coroutine.running()
+			return coroutine.yield()
+		end,
+	},
+	AchievementSnapshot = {
+		SetCallback = function(Callback: (Value: ({
+			["achievementCount"]: (number),
+			["completedAchievementCount"]: (number),
+			["claimedAchievementCount"]: (number),
+			["achievements"]: ({ ({
+				["id"]: (string),
+				["displayName"]: (string),
+				["description"]: (string),
+				["type"]: (string),
+				["progress"]: (number),
+				["target"]: (number),
+				["isComplete"]: (boolean),
+				["isClaimed"]: (boolean),
+				["rewardFootgems"]: (number),
+				["rewardFootcores"]: (number),
+			}) }),
+		})) -> ()): () -> ()
+			reliable_events[2] = Callback
+			for _, value in reliable_event_queue[2] do
+				task.spawn(Callback, value)
+			end
+			reliable_event_queue[2] = {}
+			return function()
+				reliable_events[2] = nil
+			end
 		end,
 	},
 }

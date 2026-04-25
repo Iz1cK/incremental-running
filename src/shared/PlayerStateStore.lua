@@ -46,6 +46,10 @@ local defaultState = {
 	shopExtraPetSlotsCount = 0,
 	shopPetPassiveOverclockCount = 0,
 	shopBootValueCoreCount = 0,
+	achievementCount = 0,
+	completedAchievementCount = 0,
+	claimedAchievementCount = 0,
+	achievements = {},
 	pets = {},
 	isSprinting = false,
 	sprintEndsAt = 0,
@@ -65,6 +69,15 @@ local function copyState()
 	end
 
 	snapshot.pets = copiedPets
+
+	local achievements = state.achievements
+	local copiedAchievements = table.create(#achievements)
+
+	for index, achievement in ipairs(achievements) do
+		copiedAchievements[index] = table.clone(achievement)
+	end
+
+	snapshot.achievements = copiedAchievements
 
 	return snapshot
 end

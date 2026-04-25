@@ -76,6 +76,39 @@ event PetInventorySnapshot = {
 	},
 }
 
+event AchievementSnapshot = {
+	from: Server,
+	type: Reliable,
+	call: SingleAsync,
+	data: struct {
+		achievementCount: u8,
+		completedAchievementCount: u8,
+		claimedAchievementCount: u8,
+		achievements: struct {
+			id: string.utf8(..32),
+			displayName: string.utf8(..64),
+			description: string.utf8(..160),
+			type: string.utf8(..32),
+			progress: f64,
+			target: f64,
+			isComplete: boolean,
+			isClaimed: boolean,
+			rewardFootgems: u32,
+			rewardFootcores: u32,
+		}[..32],
+	},
+}
+
+event LiveConfigSnapshot = {
+	from: Server,
+	type: Reliable,
+	call: SingleAsync,
+	data: struct {
+		key: string.utf8(..64),
+		payloadJson: string.utf8(..65535),
+	},
+}
+
 event RequestSprint = {
 	from: Client,
 	type: Reliable,
@@ -147,6 +180,36 @@ funct GetPetInventory = {
 			level: u8(1..5),
 			isEquipped: boolean,
 		}[..45],
+	},
+}
+
+funct GetAchievements = {
+	call: Async,
+	rets: struct {
+		achievementCount: u8,
+		completedAchievementCount: u8,
+		claimedAchievementCount: u8,
+		achievements: struct {
+			id: string.utf8(..32),
+			displayName: string.utf8(..64),
+			description: string.utf8(..160),
+			type: string.utf8(..32),
+			progress: f64,
+			target: f64,
+			isComplete: boolean,
+			isClaimed: boolean,
+			rewardFootgems: u32,
+			rewardFootcores: u32,
+		}[..32],
+	},
+}
+
+funct GetLiveConfigSnapshot = {
+	call: Async,
+	args: string.utf8(..64),
+	rets: struct {
+		found: boolean,
+		payloadJson: string.utf8(..65535),
 	},
 }
 
@@ -234,5 +297,16 @@ funct EquipBestPets = {
 	rets: struct {
 		success: boolean,
 		message: string.utf8(..160),
+	},
+}
+
+funct ClaimAchievement = {
+	call: Async,
+	args: string.utf8(..32),
+	rets: struct {
+		success: boolean,
+		message: string.utf8(..160),
+		awardedFootgems: u32,
+		awardedFootcores: u32,
 	},
 }

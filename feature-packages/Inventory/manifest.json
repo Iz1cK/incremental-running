@@ -1,0 +1,17 @@
+{
+  "name": "FootyenInventoryPackage",
+  "version": "1.0.0",
+  "type": "source-export",
+  "assumesBasePackages": ["React", "ReactRoblox", "Zap"],
+  "copyTargets": {
+    "src/client/PetInventoryUi.local.lua": "src/client/PetInventoryUi.local.lua",
+    "src/shared/PetConfig.lua": "src/shared/PetConfig.lua",
+    "src/shared/UiAssetConfig.lua": "src/shared/UiAssetConfig.lua"
+  },
+  "requiresHostFiles": [
+    "src/shared/PlayerStateStore.lua",
+    "src/config.zap",
+    "src/server/FootyenService.legacy.lua"
+  ],
+  "backendContractDoc": "docs/BACKEND_CONTRACT.md"
+}

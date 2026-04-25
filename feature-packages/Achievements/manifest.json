@@ -1,0 +1,18 @@
+{
+  "name": "FootyenAchievementsPackage",
+  "version": "1.0.0",
+  "type": "source-export",
+  "assumesBasePackages": ["React", "ReactRoblox", "Zap"],
+  "copyTargets": {
+    "src/client/AchievementUi.local.lua": "src/client/AchievementUi.local.lua",
+    "src/shared/AchievementConfig.lua": "src/shared/AchievementConfig.lua"
+  },
+  "requiresHostFiles": [
+    "src/shared/PlayerStateStore.lua",
+    "src/shared/PrestigeConfig.lua",
+    "src/shared/WorldConfig.lua",
+    "src/config.zap",
+    "src/server/FootyenService.legacy.lua"
+  ],
+  "backendContractDoc": "docs/BACKEND_CONTRACT.md"
+}

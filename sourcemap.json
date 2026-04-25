@@ -60,6 +60,14 @@
               ]
             },
             {
+              "name": "LiveConfig",
+              "className": "ModuleScript",
+              "pluginManaged": true,
+              "filePaths": [
+                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/src/shared/LiveConfig.lua"
+              ]
+            },
+            {
               "name": "UpgradeConfig",
               "className": "ModuleScript",
               "pluginManaged": true,
@@ -146,6 +154,70 @@
               "filePaths": [
                 "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/src/shared/ShopConfig.lua"
               ]
+            },
+            {
+              "name": "WorldConfig",
+              "className": "ModuleScript",
+              "pluginManaged": true,
+              "filePaths": [
+                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/src/shared/WorldConfig.lua"
+              ]
+            },
+            {
+              "name": "PrestigeConfig",
+              "className": "ModuleScript",
+              "pluginManaged": true,
+              "filePaths": [
+                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/src/shared/PrestigeConfig.lua"
+              ]
+            },
+            {
+              "name": "BannerConfig",
+              "className": "ModuleScript",
+              "pluginManaged": true,
+              "filePaths": [
+                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/src/shared/BannerConfig.lua"
+              ]
+            },
+            {
+              "name": "PetAbilityConfig",
+              "className": "ModuleScript",
+              "pluginManaged": true,
+              "filePaths": [
+                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/src/shared/PetAbilityConfig.lua"
+              ]
+            },
+            {
+              "name": "AchievementConfig",
+              "className": "ModuleScript",
+              "pluginManaged": true,
+              "filePaths": [
+                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/src/shared/AchievementConfig.lua"
+              ]
+            },
+            {
+              "name": "DailyRewardConfig",
+              "className": "ModuleScript",
+              "pluginManaged": true,
+              "filePaths": [
+                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/src/shared/DailyRewardConfig.lua"
+              ]
+            },
+            {
+              "name": "OfflineProgressConfig",
+              "className": "ModuleScript",
+              "pluginManaged": true,
+              "filePaths": [
+                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/src/shared/OfflineProgressConfig.lua"
+              ]
+            },
+            {
+              "name": "LiveConfig",
+              "className": "ModuleScript",
+              "pluginManaged": true,
+              "filePaths": [
+                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/src/shared/LiveConfig.lua"
+              ]
             }
           ]
         },
@@ -213,6 +285,9 @@
                           "name": "lib",
                           "className": "ModuleScript",
                           "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/evaera_promise@4.0.0/promise/lib/init.lua"
+                          ],
                           "children": [
                             {
                               "name": "init.spec",
@@ -246,6 +321,9 @@
                                   "name": "src",
                                   "className": "ModuleScript",
                                   "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/evaera_promise@4.0.0/promise/modules/testez/src/init.lua"
+                                  ],
                                   "children": [
                                     {
                                       "name": "Context",
@@ -369,11 +447,17 @@
                                       "name": "lemur",
                                       "className": "ModuleScript",
                                       "pluginManaged": true,
+                                      "filePaths": [
+                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/evaera_promise@4.0.0/promise/modules/testez/modules/lemur/init.lua"
+                                      ],
                                       "children": [
                                         {
                                           "name": "lib",
                                           "className": "ModuleScript",
                                           "pluginManaged": true,
+                                          "filePaths": [
+                                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/evaera_promise@4.0.0/promise/modules/testez/modules/lemur/lib/init.lua"
+                                          ],
                                           "children": [
                                             {
                                               "name": "assign",
@@ -451,6 +535,9 @@
                                               "name": "Enum",
                                               "className": "ModuleScript",
                                               "pluginManaged": true,
+                                              "filePaths": [
+                                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/evaera_promise@4.0.0/promise/modules/testez/modules/lemur/lib/Enum/init.lua"
+                                              ],
                                               "children": [
                                                 {
                                                   "name": "ConnectionState",
@@ -706,6 +793,9 @@
                                               "name": "functions",
                                               "className": "ModuleScript",
                                               "pluginManaged": true,
+                                              "filePaths": [
+                                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/evaera_promise@4.0.0/promise/modules/testez/modules/lemur/lib/functions/init.lua"
+                                              ],
                                               "children": [
                                                 {
                                                   "name": "tick",
@@ -816,6 +906,9 @@
                                               "name": "instances",
                                               "className": "ModuleScript",
                                               "pluginManaged": true,
+                                              "filePaths": [
+                                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/evaera_promise@4.0.0/promise/modules/testez/modules/lemur/lib/instances/init.lua"
+                                              ],
                                               "children": [
                                                 {
                                                   "name": "AnalyticsService",
@@ -1799,6 +1892,9 @@
                                               "name": "libs",
                                               "className": "ModuleScript",
                                               "pluginManaged": true,
+                                              "filePaths": [
+                                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/evaera_promise@4.0.0/promise/modules/testez/modules/lemur/lib/libs/init.lua"
+                                              ],
                                               "children": [
                                                 {
                                                   "name": "bit32",
@@ -1870,6 +1966,9 @@
                                               "name": "taskFunctions",
                                               "className": "ModuleScript",
                                               "pluginManaged": true,
+                                              "filePaths": [
+                                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/evaera_promise@4.0.0/promise/modules/testez/modules/lemur/lib/taskFunctions/init.lua"
+                                              ],
                                               "children": [
                                                 {
                                                   "name": "delay",
@@ -1941,6 +2040,9 @@
                                               "name": "types",
                                               "className": "ModuleScript",
                                               "pluginManaged": true,
+                                              "filePaths": [
+                                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/evaera_promise@4.0.0/promise/modules/testez/modules/lemur/lib/types/init.lua"
+                                              ],
                                               "children": [
                                                 {
                                                   "name": "Color3",
@@ -2150,6 +2252,9 @@
                                                   "name": "usurp",
                                                   "className": "ModuleScript",
                                                   "pluginManaged": true,
+                                                  "filePaths": [
+                                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/evaera_promise@4.0.0/promise/modules/testez/modules/lemur/spec/test-project/usurp/init.lua"
+                                                  ],
                                                   "children": [
                                                     {
                                                       "name": "foo",
@@ -2450,6 +2555,856 @@
                   ]
                 },
                 {
+                  "name": "jsdotlua_string@1.2.7",
+                  "className": "Folder",
+                  "pluginManaged": true,
+                  "children": [
+                    {
+                      "name": "es7-types",
+                      "className": "ModuleScript",
+                      "pluginManaged": true,
+                      "filePaths": [
+                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/es7-types.lua"
+                      ]
+                    },
+                    {
+                      "name": "number",
+                      "className": "ModuleScript",
+                      "pluginManaged": true,
+                      "filePaths": [
+                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/number.lua"
+                      ]
+                    },
+                    {
+                      "name": "string",
+                      "className": "Folder",
+                      "pluginManaged": true,
+                      "children": [
+                        {
+                          "name": "src",
+                          "className": "ModuleScript",
+                          "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/init.lua"
+                          ],
+                          "children": [
+                            {
+                              "name": "charCodeAt",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/charCodeAt.lua"
+                              ]
+                            },
+                            {
+                              "name": "endsWith",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/endsWith.lua"
+                              ]
+                            },
+                            {
+                              "name": "findOr",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/findOr.lua"
+                              ]
+                            },
+                            {
+                              "name": "includes",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/includes.lua"
+                              ]
+                            },
+                            {
+                              "name": "indexOf",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/indexOf.lua"
+                              ]
+                            },
+                            {
+                              "name": "lastIndexOf",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/lastIndexOf.lua"
+                              ]
+                            },
+                            {
+                              "name": "slice",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/slice.lua"
+                              ]
+                            },
+                            {
+                              "name": "split",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/split.lua"
+                              ]
+                            },
+                            {
+                              "name": "startsWith",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/startsWith.lua"
+                              ]
+                            },
+                            {
+                              "name": "substr",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/substr.lua"
+                              ]
+                            },
+                            {
+                              "name": "trim",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/trim.lua"
+                              ]
+                            },
+                            {
+                              "name": "trimEnd",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/trimEnd.lua"
+                              ]
+                            },
+                            {
+                              "name": "trimStart",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/trimStart.lua"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "number",
+                          "className": "ModuleScript",
+                          "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/number.lua"
+                          ]
+                        },
+                        {
+                          "name": "es7-types",
+                          "className": "ModuleScript",
+                          "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/es7-types.lua"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "jsdotlua_symbol-luau@1.0.1",
+                  "className": "Folder",
+                  "pluginManaged": true,
+                  "children": [
+                    {
+                      "name": "symbol-luau",
+                      "className": "Folder",
+                      "pluginManaged": true,
+                      "children": [
+                        {
+                          "name": "src",
+                          "className": "ModuleScript",
+                          "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_symbol-luau@1.0.1/symbol-luau/src/init.lua"
+                          ],
+                          "children": [
+                            {
+                              "name": "Registry.global",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_symbol-luau@1.0.1/symbol-luau/src/Registry.global.lua"
+                              ]
+                            },
+                            {
+                              "name": "Symbol",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_symbol-luau@1.0.1/symbol-luau/src/Symbol.lua"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "jsdotlua_timers@1.2.7",
+                  "className": "Folder",
+                  "pluginManaged": true,
+                  "children": [
+                    {
+                      "name": "collections",
+                      "className": "ModuleScript",
+                      "pluginManaged": true,
+                      "filePaths": [
+                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_timers@1.2.7/collections.lua"
+                      ]
+                    },
+                    {
+                      "name": "timers",
+                      "className": "Folder",
+                      "pluginManaged": true,
+                      "children": [
+                        {
+                          "name": "src",
+                          "className": "ModuleScript",
+                          "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_timers@1.2.7/timers/src/init.lua"
+                          ],
+                          "children": [
+                            {
+                              "name": "makeIntervalImpl",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_timers@1.2.7/timers/src/makeIntervalImpl.lua"
+                              ]
+                            },
+                            {
+                              "name": "makeTimerImpl",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_timers@1.2.7/timers/src/makeTimerImpl.lua"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "collections",
+                          "className": "ModuleScript",
+                          "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_timers@1.2.7/timers/collections.lua"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "jsdotlua_virtualized-list@1.3.6",
+                  "className": "Folder",
+                  "pluginManaged": true,
+                  "children": [
+                    {
+                      "name": "Flipper",
+                      "className": "ModuleScript",
+                      "pluginManaged": true,
+                      "filePaths": [
+                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/Flipper.lua"
+                      ]
+                    },
+                    {
+                      "name": "LuauPolyfill",
+                      "className": "ModuleScript",
+                      "pluginManaged": true,
+                      "filePaths": [
+                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/LuauPolyfill.lua"
+                      ]
+                    },
+                    {
+                      "name": "Promise",
+                      "className": "ModuleScript",
+                      "pluginManaged": true,
+                      "filePaths": [
+                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/Promise.lua"
+                      ]
+                    },
+                    {
+                      "name": "React",
+                      "className": "ModuleScript",
+                      "pluginManaged": true,
+                      "filePaths": [
+                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/React.lua"
+                      ]
+                    },
+                    {
+                      "name": "virtualized-list",
+                      "className": "Folder",
+                      "pluginManaged": true,
+                      "children": [
+                        {
+                          "name": "src",
+                          "className": "ModuleScript",
+                          "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/init.luau"
+                          ],
+                          "children": [
+                            {
+                              "name": "Components",
+                              "className": "Folder",
+                              "pluginManaged": true,
+                              "children": [
+                                {
+                                  "name": "ScrollView",
+                                  "className": "Folder",
+                                  "pluginManaged": true,
+                                  "children": [
+                                    {
+                                      "name": "processDecelerationRate",
+                                      "className": "ModuleScript",
+                                      "pluginManaged": true,
+                                      "filePaths": [
+                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/processDecelerationRate.luau"
+                                      ]
+                                    },
+                                    {
+                                      "name": "ScrollContentViewNativeComponent",
+                                      "className": "ModuleScript",
+                                      "pluginManaged": true,
+                                      "filePaths": [
+                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/ScrollContentViewNativeComponent.luau"
+                                      ]
+                                    },
+                                    {
+                                      "name": "ScrollView",
+                                      "className": "ModuleScript",
+                                      "pluginManaged": true,
+                                      "filePaths": [
+                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/ScrollView.luau"
+                                      ]
+                                    },
+                                    {
+                                      "name": "ScrollViewCommands",
+                                      "className": "ModuleScript",
+                                      "pluginManaged": true,
+                                      "filePaths": [
+                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/ScrollViewCommands.luau"
+                                      ]
+                                    },
+                                    {
+                                      "name": "ScrollViewContext",
+                                      "className": "ModuleScript",
+                                      "pluginManaged": true,
+                                      "filePaths": [
+                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/ScrollViewContext.luau"
+                                      ]
+                                    },
+                                    {
+                                      "name": "ScrollViewNativeComponent",
+                                      "className": "ModuleScript",
+                                      "pluginManaged": true,
+                                      "filePaths": [
+                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/ScrollViewNativeComponent.luau"
+                                      ]
+                                    },
+                                    {
+                                      "name": "ScrollViewStickyHeader",
+                                      "className": "ModuleScript",
+                                      "pluginManaged": true,
+                                      "filePaths": [
+                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/ScrollViewStickyHeader.luau"
+                                      ]
+                                    },
+                                    {
+                                      "name": "ScrollViewViewConfig",
+                                      "className": "ModuleScript",
+                                      "pluginManaged": true,
+                                      "filePaths": [
+                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/ScrollViewViewConfig.luau"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "View",
+                                  "className": "Folder",
+                                  "pluginManaged": true,
+                                  "children": [
+                                    {
+                                      "name": "View",
+                                      "className": "ModuleScript",
+                                      "pluginManaged": true,
+                                      "filePaths": [
+                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/View/View.luau"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "name": "Interaction",
+                              "className": "Folder",
+                              "pluginManaged": true,
+                              "children": [
+                                {
+                                  "name": "Batchinator",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Interaction/Batchinator.luau"
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "name": "jsUtils",
+                              "className": "Folder",
+                              "pluginManaged": true,
+                              "children": [
+                                {
+                                  "name": "invariant",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/jsUtils/invariant.luau"
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "name": "Lists",
+                              "className": "Folder",
+                              "pluginManaged": true,
+                              "children": [
+                                {
+                                  "name": "AnimatedFlatList",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/AnimatedFlatList.luau"
+                                  ]
+                                },
+                                {
+                                  "name": "CellRenderMask",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/CellRenderMask.luau"
+                                  ]
+                                },
+                                {
+                                  "name": "FillRateHelper",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/FillRateHelper.luau"
+                                  ]
+                                },
+                                {
+                                  "name": "FlatList",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/FlatList.luau"
+                                  ]
+                                },
+                                {
+                                  "name": "Hooks",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/Hooks/init.luau"
+                                  ],
+                                  "children": [
+                                    {
+                                      "name": "useFocusNavigationScrolling",
+                                      "className": "ModuleScript",
+                                      "pluginManaged": true,
+                                      "filePaths": [
+                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/Hooks/useFocusNavigationScrolling.luau"
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "SectionList",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/SectionList.luau"
+                                  ]
+                                },
+                                {
+                                  "name": "ViewabilityHelper",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/ViewabilityHelper.luau"
+                                  ]
+                                },
+                                {
+                                  "name": "VirtualizedList",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/VirtualizedList.luau"
+                                  ]
+                                },
+                                {
+                                  "name": "VirtualizedListContext",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/VirtualizedListContext.luau"
+                                  ]
+                                },
+                                {
+                                  "name": "VirtualizedSectionList",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/VirtualizedSectionList.luau"
+                                  ]
+                                },
+                                {
+                                  "name": "VirtualizeUtils",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/VirtualizeUtils.luau"
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "name": "StyleSheet",
+                              "className": "Folder",
+                              "pluginManaged": true,
+                              "children": [
+                                {
+                                  "name": "StyleSheet",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/StyleSheet/StyleSheet.luau"
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "name": "Utilities",
+                              "className": "Folder",
+                              "pluginManaged": true,
+                              "children": [
+                                {
+                                  "name": "codegenNativeCommands",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Utilities/codegenNativeCommands.luau"
+                                  ]
+                                },
+                                {
+                                  "name": "infoLog",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Utilities/infoLog.luau"
+                                  ]
+                                },
+                                {
+                                  "name": "setAndForwardRef",
+                                  "className": "ModuleScript",
+                                  "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Utilities/setAndForwardRef.luau"
+                                  ]
+                                },
+                                {
+                                  "name": "differ",
+                                  "className": "Folder",
+                                  "pluginManaged": true,
+                                  "children": [
+                                    {
+                                      "name": "deepDiffer",
+                                      "className": "ModuleScript",
+                                      "pluginManaged": true,
+                                      "filePaths": [
+                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Utilities/differ/deepDiffer.luau"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "red-blox_ratelimit@1.0.1",
+                  "className": "Folder",
+                  "pluginManaged": true,
+                  "children": [
+                    {
+                      "name": "ratelimit",
+                      "className": "Folder",
+                      "pluginManaged": true,
+                      "children": [
+                        {
+                          "name": "Ratelimit",
+                          "className": "ModuleScript",
+                          "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/red-blox_ratelimit@1.0.1/ratelimit/Ratelimit.luau"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "red-blox_signal@2.0.2",
+                  "className": "Folder",
+                  "pluginManaged": true,
+                  "children": [
+                    {
+                      "name": "Spawn",
+                      "className": "ModuleScript",
+                      "pluginManaged": true,
+                      "filePaths": [
+                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/red-blox_signal@2.0.2/Spawn.lua"
+                      ]
+                    },
+                    {
+                      "name": "signal",
+                      "className": "Folder",
+                      "pluginManaged": true,
+                      "children": [
+                        {
+                          "name": "Signal",
+                          "className": "ModuleScript",
+                          "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/red-blox_signal@2.0.2/signal/Signal.luau"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "red-blox_spawn@1.1.0",
+                  "className": "Folder",
+                  "pluginManaged": true,
+                  "children": [
+                    {
+                      "name": "spawn",
+                      "className": "Folder",
+                      "pluginManaged": true,
+                      "children": [
+                        {
+                          "name": "Spawn",
+                          "className": "ModuleScript",
+                          "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/red-blox_spawn@1.1.0/spawn/Spawn.luau"
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "reselim_flipper@2.0.0",
+                  "className": "Folder",
+                  "pluginManaged": true,
+                  "children": [
+                    {
+                      "name": "flipper",
+                      "className": "Folder",
+                      "pluginManaged": true,
+                      "children": [
+                        {
+                          "name": "src",
+                          "className": "ModuleScript",
+                          "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/init.lua"
+                          ],
+                          "children": [
+                            {
+                              "name": "BaseMotor",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/BaseMotor.lua"
+                              ]
+                            },
+                            {
+                              "name": "BaseMotor.spec",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/BaseMotor.spec.lua"
+                              ]
+                            },
+                            {
+                              "name": "GroupMotor",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/GroupMotor.lua"
+                              ]
+                            },
+                            {
+                              "name": "GroupMotor.spec",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/GroupMotor.spec.lua"
+                              ]
+                            },
+                            {
+                              "name": "Instant",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Instant.lua"
+                              ]
+                            },
+                            {
+                              "name": "Instant.spec",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Instant.spec.lua"
+                              ]
+                            },
+                            {
+                              "name": "isMotor",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/isMotor.lua"
+                              ]
+                            },
+                            {
+                              "name": "isMotor.spec",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/isMotor.spec.lua"
+                              ]
+                            },
+                            {
+                              "name": "Linear",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Linear.lua"
+                              ]
+                            },
+                            {
+                              "name": "Linear.spec",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Linear.spec.lua"
+                              ]
+                            },
+                            {
+                              "name": "Signal",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Signal.lua"
+                              ]
+                            },
+                            {
+                              "name": "Signal.spec",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Signal.spec.lua"
+                              ]
+                            },
+                            {
+                              "name": "SingleMotor",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/SingleMotor.lua"
+                              ]
+                            },
+                            {
+                              "name": "SingleMotor.spec",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/SingleMotor.spec.lua"
+                              ]
+                            },
+                            {
+                              "name": "Spring",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Spring.lua"
+                              ]
+                            },
+                            {
+                              "name": "Spring.spec",
+                              "className": "ModuleScript",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Spring.spec.lua"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "test",
+                          "className": "Folder",
+                          "pluginManaged": true,
+                          "children": [
+                            {
+                              "name": "demo",
+                              "className": "Script",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/test/demo.client.lua"
+                              ]
+                            },
+                            {
+                              "name": "runner",
+                              "className": "Script",
+                              "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/test/runner.client.lua"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
                   "name": "jsdotlua_boolean@1.2.7",
                   "className": "Folder",
                   "pluginManaged": true,
@@ -2471,6 +3426,9 @@
                           "name": "src",
                           "className": "ModuleScript",
                           "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_boolean@1.2.7/boolean/src/init.lua"
+                          ],
                           "children": [
                             {
                               "name": "toJSBoolean",
@@ -2524,11 +3482,17 @@
                           "name": "src",
                           "className": "ModuleScript",
                           "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_collections@1.2.7/collections/src/init.lua"
+                          ],
                           "children": [
                             {
                               "name": "Array",
                               "className": "ModuleScript",
                               "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_collections@1.2.7/collections/src/Array/init.lua"
+                              ],
                               "children": [
                                 {
                                   "name": "concat",
@@ -2598,6 +3562,9 @@
                                   "name": "from",
                                   "className": "ModuleScript",
                                   "pluginManaged": true,
+                                  "filePaths": [
+                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_collections@1.2.7/collections/src/Array/from/init.lua"
+                                  ],
                                   "children": [
                                     {
                                       "name": "fromArray",
@@ -2751,6 +3718,9 @@
                               "name": "Map",
                               "className": "ModuleScript",
                               "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_collections@1.2.7/collections/src/Map/init.lua"
+                              ],
                               "children": [
                                 {
                                   "name": "coerceToMap",
@@ -2782,6 +3752,9 @@
                               "name": "Object",
                               "className": "ModuleScript",
                               "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_collections@1.2.7/collections/src/Object/init.lua"
+                              ],
                               "children": [
                                 {
                                   "name": "assign",
@@ -2925,6 +3898,9 @@
                           "name": "src",
                           "className": "ModuleScript",
                           "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_console@1.2.7/console/src/init.lua"
+                          ],
                           "children": [
                             {
                               "name": "makeConsoleImpl",
@@ -2984,6 +3960,9 @@
                           "name": "src",
                           "className": "ModuleScript",
                           "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_instance-of@1.2.7/instance-of/src/init.lua"
+                          ],
                           "children": [
                             {
                               "name": "instanceof",
@@ -3093,11 +4072,17 @@
                           "name": "src",
                           "className": "ModuleScript",
                           "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_luau-polyfill@1.2.7/luau-polyfill/src/init.lua"
+                          ],
                           "children": [
                             {
                               "name": "AssertionError",
                               "className": "ModuleScript",
                               "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_luau-polyfill@1.2.7/luau-polyfill/src/AssertionError/init.lua"
+                              ],
                               "children": [
                                 {
                                   "name": "AssertionError.global",
@@ -3121,6 +4106,9 @@
                               "name": "Error",
                               "className": "ModuleScript",
                               "pluginManaged": true,
+                              "filePaths": [
+                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_luau-polyfill@1.2.7/luau-polyfill/src/Error/init.lua"
+                              ],
                               "children": [
                                 {
                                   "name": "Error.global",
@@ -3248,6 +4236,9 @@
                           "name": "src",
                           "className": "ModuleScript",
                           "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_math@1.2.7/math/src/init.lua"
+                          ],
                           "children": [
                             {
                               "name": "clz32",
@@ -3277,6 +4268,9 @@
                           "name": "src",
                           "className": "ModuleScript",
                           "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_number@1.2.7/number/src/init.lua"
+                          ],
                           "children": [
                             {
                               "name": "isFinite",
@@ -3354,6 +4348,9 @@
                           "name": "lib",
                           "className": "ModuleScript",
                           "pluginManaged": true,
+                          "filePaths": [
+                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_promise@3.5.2/promise/lib/init.lua"
+                          ],
                           "children": [
                             {
                               "name": "init.spec",
@@ -4791,844 +5788,6 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "name": "jsdotlua_string@1.2.7",
-                  "className": "Folder",
-                  "pluginManaged": true,
-                  "children": [
-                    {
-                      "name": "es7-types",
-                      "className": "ModuleScript",
-                      "pluginManaged": true,
-                      "filePaths": [
-                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/es7-types.lua"
-                      ]
-                    },
-                    {
-                      "name": "number",
-                      "className": "ModuleScript",
-                      "pluginManaged": true,
-                      "filePaths": [
-                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/number.lua"
-                      ]
-                    },
-                    {
-                      "name": "string",
-                      "className": "Folder",
-                      "pluginManaged": true,
-                      "children": [
-                        {
-                          "name": "src",
-                          "className": "ModuleScript",
-                          "pluginManaged": true,
-                          "children": [
-                            {
-                              "name": "charCodeAt",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/charCodeAt.lua"
-                              ]
-                            },
-                            {
-                              "name": "endsWith",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/endsWith.lua"
-                              ]
-                            },
-                            {
-                              "name": "findOr",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/findOr.lua"
-                              ]
-                            },
-                            {
-                              "name": "includes",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/includes.lua"
-                              ]
-                            },
-                            {
-                              "name": "indexOf",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/indexOf.lua"
-                              ]
-                            },
-                            {
-                              "name": "lastIndexOf",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/lastIndexOf.lua"
-                              ]
-                            },
-                            {
-                              "name": "slice",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/slice.lua"
-                              ]
-                            },
-                            {
-                              "name": "split",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/split.lua"
-                              ]
-                            },
-                            {
-                              "name": "startsWith",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/startsWith.lua"
-                              ]
-                            },
-                            {
-                              "name": "substr",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/substr.lua"
-                              ]
-                            },
-                            {
-                              "name": "trim",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/trim.lua"
-                              ]
-                            },
-                            {
-                              "name": "trimEnd",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/trimEnd.lua"
-                              ]
-                            },
-                            {
-                              "name": "trimStart",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/src/trimStart.lua"
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "name": "number",
-                          "className": "ModuleScript",
-                          "pluginManaged": true,
-                          "filePaths": [
-                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/number.lua"
-                          ]
-                        },
-                        {
-                          "name": "es7-types",
-                          "className": "ModuleScript",
-                          "pluginManaged": true,
-                          "filePaths": [
-                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_string@1.2.7/string/es7-types.lua"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "jsdotlua_symbol-luau@1.0.1",
-                  "className": "Folder",
-                  "pluginManaged": true,
-                  "children": [
-                    {
-                      "name": "symbol-luau",
-                      "className": "Folder",
-                      "pluginManaged": true,
-                      "children": [
-                        {
-                          "name": "src",
-                          "className": "ModuleScript",
-                          "pluginManaged": true,
-                          "children": [
-                            {
-                              "name": "Registry.global",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_symbol-luau@1.0.1/symbol-luau/src/Registry.global.lua"
-                              ]
-                            },
-                            {
-                              "name": "Symbol",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_symbol-luau@1.0.1/symbol-luau/src/Symbol.lua"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "jsdotlua_timers@1.2.7",
-                  "className": "Folder",
-                  "pluginManaged": true,
-                  "children": [
-                    {
-                      "name": "collections",
-                      "className": "ModuleScript",
-                      "pluginManaged": true,
-                      "filePaths": [
-                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_timers@1.2.7/collections.lua"
-                      ]
-                    },
-                    {
-                      "name": "timers",
-                      "className": "Folder",
-                      "pluginManaged": true,
-                      "children": [
-                        {
-                          "name": "src",
-                          "className": "ModuleScript",
-                          "pluginManaged": true,
-                          "children": [
-                            {
-                              "name": "makeIntervalImpl",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_timers@1.2.7/timers/src/makeIntervalImpl.lua"
-                              ]
-                            },
-                            {
-                              "name": "makeTimerImpl",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_timers@1.2.7/timers/src/makeTimerImpl.lua"
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "name": "collections",
-                          "className": "ModuleScript",
-                          "pluginManaged": true,
-                          "filePaths": [
-                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_timers@1.2.7/timers/collections.lua"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "jsdotlua_virtualized-list@1.3.6",
-                  "className": "Folder",
-                  "pluginManaged": true,
-                  "children": [
-                    {
-                      "name": "Flipper",
-                      "className": "ModuleScript",
-                      "pluginManaged": true,
-                      "filePaths": [
-                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/Flipper.lua"
-                      ]
-                    },
-                    {
-                      "name": "LuauPolyfill",
-                      "className": "ModuleScript",
-                      "pluginManaged": true,
-                      "filePaths": [
-                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/LuauPolyfill.lua"
-                      ]
-                    },
-                    {
-                      "name": "Promise",
-                      "className": "ModuleScript",
-                      "pluginManaged": true,
-                      "filePaths": [
-                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/Promise.lua"
-                      ]
-                    },
-                    {
-                      "name": "React",
-                      "className": "ModuleScript",
-                      "pluginManaged": true,
-                      "filePaths": [
-                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/React.lua"
-                      ]
-                    },
-                    {
-                      "name": "virtualized-list",
-                      "className": "Folder",
-                      "pluginManaged": true,
-                      "children": [
-                        {
-                          "name": "src",
-                          "className": "ModuleScript",
-                          "pluginManaged": true,
-                          "filePaths": [
-                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/init.luau"
-                          ],
-                          "children": [
-                            {
-                              "name": "Components",
-                              "className": "Folder",
-                              "pluginManaged": true,
-                              "children": [
-                                {
-                                  "name": "ScrollView",
-                                  "className": "Folder",
-                                  "pluginManaged": true,
-                                  "children": [
-                                    {
-                                      "name": "processDecelerationRate",
-                                      "className": "ModuleScript",
-                                      "pluginManaged": true,
-                                      "filePaths": [
-                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/processDecelerationRate.luau"
-                                      ]
-                                    },
-                                    {
-                                      "name": "ScrollContentViewNativeComponent",
-                                      "className": "ModuleScript",
-                                      "pluginManaged": true,
-                                      "filePaths": [
-                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/ScrollContentViewNativeComponent.luau"
-                                      ]
-                                    },
-                                    {
-                                      "name": "ScrollView",
-                                      "className": "ModuleScript",
-                                      "pluginManaged": true,
-                                      "filePaths": [
-                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/ScrollView.luau"
-                                      ]
-                                    },
-                                    {
-                                      "name": "ScrollViewCommands",
-                                      "className": "ModuleScript",
-                                      "pluginManaged": true,
-                                      "filePaths": [
-                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/ScrollViewCommands.luau"
-                                      ]
-                                    },
-                                    {
-                                      "name": "ScrollViewContext",
-                                      "className": "ModuleScript",
-                                      "pluginManaged": true,
-                                      "filePaths": [
-                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/ScrollViewContext.luau"
-                                      ]
-                                    },
-                                    {
-                                      "name": "ScrollViewNativeComponent",
-                                      "className": "ModuleScript",
-                                      "pluginManaged": true,
-                                      "filePaths": [
-                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/ScrollViewNativeComponent.luau"
-                                      ]
-                                    },
-                                    {
-                                      "name": "ScrollViewStickyHeader",
-                                      "className": "ModuleScript",
-                                      "pluginManaged": true,
-                                      "filePaths": [
-                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/ScrollViewStickyHeader.luau"
-                                      ]
-                                    },
-                                    {
-                                      "name": "ScrollViewViewConfig",
-                                      "className": "ModuleScript",
-                                      "pluginManaged": true,
-                                      "filePaths": [
-                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/ScrollView/ScrollViewViewConfig.luau"
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "View",
-                                  "className": "Folder",
-                                  "pluginManaged": true,
-                                  "children": [
-                                    {
-                                      "name": "View",
-                                      "className": "ModuleScript",
-                                      "pluginManaged": true,
-                                      "filePaths": [
-                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Components/View/View.luau"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "name": "Interaction",
-                              "className": "Folder",
-                              "pluginManaged": true,
-                              "children": [
-                                {
-                                  "name": "Batchinator",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Interaction/Batchinator.luau"
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "name": "jsUtils",
-                              "className": "Folder",
-                              "pluginManaged": true,
-                              "children": [
-                                {
-                                  "name": "invariant",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/jsUtils/invariant.luau"
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "name": "Lists",
-                              "className": "Folder",
-                              "pluginManaged": true,
-                              "children": [
-                                {
-                                  "name": "AnimatedFlatList",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/AnimatedFlatList.luau"
-                                  ]
-                                },
-                                {
-                                  "name": "CellRenderMask",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/CellRenderMask.luau"
-                                  ]
-                                },
-                                {
-                                  "name": "FillRateHelper",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/FillRateHelper.luau"
-                                  ]
-                                },
-                                {
-                                  "name": "FlatList",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/FlatList.luau"
-                                  ]
-                                },
-                                {
-                                  "name": "Hooks",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/Hooks/init.luau"
-                                  ],
-                                  "children": [
-                                    {
-                                      "name": "useFocusNavigationScrolling",
-                                      "className": "ModuleScript",
-                                      "pluginManaged": true,
-                                      "filePaths": [
-                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/Hooks/useFocusNavigationScrolling.luau"
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "SectionList",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/SectionList.luau"
-                                  ]
-                                },
-                                {
-                                  "name": "ViewabilityHelper",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/ViewabilityHelper.luau"
-                                  ]
-                                },
-                                {
-                                  "name": "VirtualizedList",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/VirtualizedList.luau"
-                                  ]
-                                },
-                                {
-                                  "name": "VirtualizedListContext",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/VirtualizedListContext.luau"
-                                  ]
-                                },
-                                {
-                                  "name": "VirtualizedSectionList",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/VirtualizedSectionList.luau"
-                                  ]
-                                },
-                                {
-                                  "name": "VirtualizeUtils",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Lists/VirtualizeUtils.luau"
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "name": "StyleSheet",
-                              "className": "Folder",
-                              "pluginManaged": true,
-                              "children": [
-                                {
-                                  "name": "StyleSheet",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/StyleSheet/StyleSheet.luau"
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "name": "Utilities",
-                              "className": "Folder",
-                              "pluginManaged": true,
-                              "children": [
-                                {
-                                  "name": "codegenNativeCommands",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Utilities/codegenNativeCommands.luau"
-                                  ]
-                                },
-                                {
-                                  "name": "infoLog",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Utilities/infoLog.luau"
-                                  ]
-                                },
-                                {
-                                  "name": "setAndForwardRef",
-                                  "className": "ModuleScript",
-                                  "pluginManaged": true,
-                                  "filePaths": [
-                                    "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Utilities/setAndForwardRef.luau"
-                                  ]
-                                },
-                                {
-                                  "name": "differ",
-                                  "className": "Folder",
-                                  "pluginManaged": true,
-                                  "children": [
-                                    {
-                                      "name": "deepDiffer",
-                                      "className": "ModuleScript",
-                                      "pluginManaged": true,
-                                      "filePaths": [
-                                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/jsdotlua_virtualized-list@1.3.6/virtualized-list/src/Utilities/differ/deepDiffer.luau"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "red-blox_ratelimit@1.0.1",
-                  "className": "Folder",
-                  "pluginManaged": true,
-                  "children": [
-                    {
-                      "name": "ratelimit",
-                      "className": "Folder",
-                      "pluginManaged": true,
-                      "children": [
-                        {
-                          "name": "Ratelimit",
-                          "className": "ModuleScript",
-                          "pluginManaged": true,
-                          "filePaths": [
-                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/red-blox_ratelimit@1.0.1/ratelimit/Ratelimit.luau"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "red-blox_signal@2.0.2",
-                  "className": "Folder",
-                  "pluginManaged": true,
-                  "children": [
-                    {
-                      "name": "Spawn",
-                      "className": "ModuleScript",
-                      "pluginManaged": true,
-                      "filePaths": [
-                        "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/red-blox_signal@2.0.2/Spawn.lua"
-                      ]
-                    },
-                    {
-                      "name": "signal",
-                      "className": "Folder",
-                      "pluginManaged": true,
-                      "children": [
-                        {
-                          "name": "Signal",
-                          "className": "ModuleScript",
-                          "pluginManaged": true,
-                          "filePaths": [
-                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/red-blox_signal@2.0.2/signal/Signal.luau"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "red-blox_spawn@1.1.0",
-                  "className": "Folder",
-                  "pluginManaged": true,
-                  "children": [
-                    {
-                      "name": "spawn",
-                      "className": "Folder",
-                      "pluginManaged": true,
-                      "children": [
-                        {
-                          "name": "Spawn",
-                          "className": "ModuleScript",
-                          "pluginManaged": true,
-                          "filePaths": [
-                            "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/red-blox_spawn@1.1.0/spawn/Spawn.luau"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "reselim_flipper@2.0.0",
-                  "className": "Folder",
-                  "pluginManaged": true,
-                  "children": [
-                    {
-                      "name": "flipper",
-                      "className": "Folder",
-                      "pluginManaged": true,
-                      "children": [
-                        {
-                          "name": "src",
-                          "className": "ModuleScript",
-                          "pluginManaged": true,
-                          "children": [
-                            {
-                              "name": "BaseMotor",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/BaseMotor.lua"
-                              ]
-                            },
-                            {
-                              "name": "BaseMotor.spec",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/BaseMotor.spec.lua"
-                              ]
-                            },
-                            {
-                              "name": "GroupMotor",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/GroupMotor.lua"
-                              ]
-                            },
-                            {
-                              "name": "GroupMotor.spec",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/GroupMotor.spec.lua"
-                              ]
-                            },
-                            {
-                              "name": "Instant",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Instant.lua"
-                              ]
-                            },
-                            {
-                              "name": "Instant.spec",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Instant.spec.lua"
-                              ]
-                            },
-                            {
-                              "name": "isMotor",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/isMotor.lua"
-                              ]
-                            },
-                            {
-                              "name": "isMotor.spec",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/isMotor.spec.lua"
-                              ]
-                            },
-                            {
-                              "name": "Linear",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Linear.lua"
-                              ]
-                            },
-                            {
-                              "name": "Linear.spec",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Linear.spec.lua"
-                              ]
-                            },
-                            {
-                              "name": "Signal",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Signal.lua"
-                              ]
-                            },
-                            {
-                              "name": "Signal.spec",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Signal.spec.lua"
-                              ]
-                            },
-                            {
-                              "name": "SingleMotor",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/SingleMotor.lua"
-                              ]
-                            },
-                            {
-                              "name": "SingleMotor.spec",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/SingleMotor.spec.lua"
-                              ]
-                            },
-                            {
-                              "name": "Spring",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Spring.lua"
-                              ]
-                            },
-                            {
-                              "name": "Spring.spec",
-                              "className": "ModuleScript",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/src/Spring.spec.lua"
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "name": "test",
-                          "className": "Folder",
-                          "pluginManaged": true,
-                          "children": [
-                            {
-                              "name": "demo",
-                              "className": "Script",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/test/demo.client.lua"
-                              ]
-                            },
-                            {
-                              "name": "runner",
-                              "className": "Script",
-                              "pluginManaged": true,
-                              "filePaths": [
-                                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/Packages/_Index/reselim_flipper@2.0.0/flipper/test/runner.client.lua"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
                 }
               ]
             }
@@ -5708,6 +5867,14 @@
               "pluginManaged": true,
               "filePaths": [
                 "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/src/client/ShopUi.local.lua"
+              ]
+            },
+            {
+              "name": "AchievementUi",
+              "className": "LocalScript",
+              "pluginManaged": true,
+              "filePaths": [
+                "c:/Users/Win11/OneDrive/Desktop/Roblox Dev/incremental-running/src/client/AchievementUi.local.lua"
               ]
             }
           ]

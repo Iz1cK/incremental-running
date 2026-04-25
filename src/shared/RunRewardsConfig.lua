@@ -1,3 +1,20 @@
+local LiveConfig = require(script.Parent:WaitForChild("LiveConfig"))
+
+--[[
+LiveConfig default JSON example:
+{
+  "BASE_WALK_SPEED": 16,
+  "STUDS_PER_FOOTYEN": 20,
+  "SAMPLE_INTERVAL": 0.15,
+  "MINIMUM_MOVE_DIRECTION": 0.05,
+  "MAX_TRACKED_STEP_STUDS": 18,
+  "TRACK_HORIZONTAL_ONLY": true,
+  "SPRINT_MULTIPLIER": 5,
+  "SPRINT_DURATION_SECONDS": 5,
+  "SPRINT_COOLDOWN_SECONDS": 30,
+  "SPRINT_REQUEST_THROTTLE_SECONDS": 0.15
+}
+]]
 local RunRewardsConfig = {
 	BASE_WALK_SPEED = 16,
 	STUDS_PER_FOOTYEN = 20,
@@ -10,5 +27,9 @@ local RunRewardsConfig = {
 	SPRINT_COOLDOWN_SECONDS = 30,
 	SPRINT_REQUEST_THROTTLE_SECONDS = 0.15,
 }
+
+RunRewardsConfig.Live = LiveConfig.attachModule(RunRewardsConfig, {
+	key = "RunRewardsConfig",
+})
 
 return RunRewardsConfig
